@@ -1,0 +1,1567 @@
+{
+ "screenId": "assetSetupTable",
+ "name": "Asset Library Setup",
+ "isWidget": false,
+ "version": "0.0.27",
+ "deployed": true,
+ "design": {
+  "components": [
+   {
+    "name": "Asset Library",
+    "tabTitle": "Asset Library",
+    "type": "canvas",
+    "props": {
+     "design": {
+      "fEoSIQc4iq": {
+       "type": {
+        "resolvedName": "TextInput"
+       },
+       "isCanvas": false,
+       "props": {
+        "padding": 8,
+        "width": "300px",
+        "height": "auto",
+        "validation": {
+         "required": false
+        },
+        "uniqueValidationEnabled": false,
+        "visible": true,
+        "type": "text",
+        "label": "Name",
+        "variant": "outlined",
+        "formElement": "AssetFilters",
+        "dataPath": "name",
+        "field": "name",
+        "description": "",
+        "element": "TextInput",
+        "predicate": "_contains",
+        "target": {
+         "dataPath": "name._contains"
+        }
+       },
+       "displayName": "Text",
+       "custom": {
+        "elementName": "Text1"
+       },
+       "parent": "MIsy2sKwiO",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "CCcgyGIuse": {
+       "type": {
+        "resolvedName": "Checkbox"
+       },
+       "isCanvas": false,
+       "props": {
+        "padding": 8,
+        "width": "170px",
+        "height": "auto",
+        "validation": {
+         "required": false
+        },
+        "uniqueValidationEnabled": false,
+        "visible": true,
+        "type": "checkbox",
+        "label": "Customer Facing",
+        "formElement": "AssetFilters",
+        "dataPath": "customerFacing",
+        "field": "customerFacing",
+        "description": "",
+        "element": "Checkbox",
+        "predicate": "_eq",
+        "target": {
+         "dataPath": "customerFacing._eq"
+        },
+        "defaultValue": true
+       },
+       "displayName": "Checkbox",
+       "custom": {
+        "elementName": "Checkbox2"
+       },
+       "parent": "MIsy2sKwiO",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "YWigWCaaQi": {
+       "type": {
+        "resolvedName": "TextInput"
+       },
+       "isCanvas": false,
+       "props": {
+        "padding": 8,
+        "width": "300px",
+        "height": "auto",
+        "validation": {
+         "required": false
+        },
+        "uniqueValidationEnabled": false,
+        "visible": true,
+        "type": "text",
+        "label": "Bunny Library",
+        "variant": "outlined",
+        "formElement": "AssetFilters",
+        "dataPath": "bunnyLibraryName",
+        "field": "bunnyLibraryName",
+        "description": "",
+        "element": "TextInput",
+        "predicate": "_contains",
+        "target": {
+         "dataPath": "bunnyLibraryName._contains"
+        }
+       },
+       "displayName": "Text",
+       "custom": {
+        "elementName": "Text3"
+       },
+       "parent": "MIsy2sKwiO",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "zswUSI4IIK": {
+       "type": {
+        "resolvedName": "TextInput"
+       },
+       "isCanvas": false,
+       "props": {
+        "padding": 8,
+        "width": "300px",
+        "height": "auto",
+        "validation": {
+         "required": false
+        },
+        "uniqueValidationEnabled": false,
+        "visible": true,
+        "type": "text",
+        "label": "Bunny Collection",
+        "variant": "outlined",
+        "formElement": "AssetFilters",
+        "dataPath": "bunnyCollectionName",
+        "field": "bunnyCollectionName",
+        "description": "",
+        "element": "TextInput",
+        "predicate": "_contains",
+        "target": {
+         "dataPath": "bunnyCollectionName._contains"
+        }
+       },
+       "displayName": "Text",
+       "custom": {
+        "elementName": "Text4"
+       },
+       "parent": "MIsy2sKwiO",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "MIsy2sKwiO": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 8,
+        "margin": 0,
+        "flexWrap": true,
+        "flexDirection": "row",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-end",
+        "width": "100%",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": false,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {},
+        "gap": "8px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "tqomUyKoQo",
+       "hidden": false,
+       "nodes": [
+        "fEoSIQc4iq",
+        "CCcgyGIuse",
+        "YWigWCaaQi",
+        "zswUSI4IIK"
+       ],
+       "linkedNodes": {}
+      },
+      "tqomUyKoQo": {
+       "type": {
+        "resolvedName": "Form"
+       },
+       "isCanvas": true,
+       "props": {
+        "query": {
+         "api": "Application",
+         "model": "Asset",
+         "query": null,
+         "dataPath": "edges[0]",
+         "dataTransform": {
+          "transform": null,
+          "remote": true
+         },
+         "dataSubscription": {
+          "enabled": false
+         },
+         "autoLoad": false,
+         "fields": []
+        },
+        "blockNavigationWhenDirty": false,
+        "enableConfirmOnDataChanged": false
+       },
+       "displayName": "Form",
+       "custom": {
+        "elementName": "AssetFilters"
+       },
+       "parent": "aMCIAaSIx2",
+       "hidden": false,
+       "nodes": [
+        "MIsy2sKwiO"
+       ],
+       "linkedNodes": {}
+      },
+      "XGGMSU8iMe": {
+       "type": {
+        "resolvedName": "ActionButton"
+       },
+       "isCanvas": false,
+       "props": {
+        "margin": 0,
+        "buttonColor": "secondary",
+        "width": "auto",
+        "height": "auto",
+        "disabled": false,
+        "hidden": false,
+        "useIconButton": false,
+        "disableHover": false,
+        "disableRipple": false,
+        "action": [
+         {
+          "type": "confirmation",
+          "buttonColor": "primary",
+          "submitIcon": {
+           "icon": "rotate",
+           "variant": "regular"
+          },
+          "message": {
+           "__transform": "\"Pull the latest libraries, collections and videos from Bunny.net? Names, descriptions and Customer Facing flags are preserved.\""
+          }
+         },
+         {
+          "type": "flow",
+          "flowId": "syncBunnyAssets",
+          "transforms": {
+           "pre": "$"
+          }
+         },
+         {
+          "type": "transformation",
+          "transformation": "$components.AssetTable.fn.search()",
+          "remote": false
+         },
+         {
+          "type": "message",
+          "title": "Sync complete",
+          "message": "Asset library refreshed from Bunny.net.",
+          "severity": "success"
+         }
+        ],
+        "text": "Sync from Bunny",
+        "title": "Sync from Bunny",
+        "icon": {
+         "icon": "rotate",
+         "variant": "regular"
+        }
+       },
+       "displayName": "Action",
+       "custom": {},
+       "parent": "cGWGOYOoiy",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "qOCY6wq8Sk": {
+       "type": {
+        "resolvedName": "ActionButton"
+       },
+       "isCanvas": false,
+       "props": {
+        "margin": 0,
+        "buttonColor": "secondary",
+        "width": "auto",
+        "height": "auto",
+        "disabled": false,
+        "hidden": false,
+        "useIconButton": false,
+        "disableHover": false,
+        "disableRipple": false,
+        "action": [
+         {
+          "type": "form",
+          "title": "Create Asset Library",
+          "submitIcon": {
+           "icon": "plus",
+           "variant": "regular"
+          },
+          "fields": [
+           {
+            "name": "id",
+            "label": "Id (stable code)",
+            "type": "text",
+            "dataPath": "id",
+            "description": "Stable code used by every foreign key \u2014 e.g. smb, partnerErpSi. Never change it once rows reference it.",
+            "validation": {
+             "required": true
+            }
+           },
+           {
+            "name": "name",
+            "label": "Name",
+            "type": "text",
+            "dataPath": "name",
+            "validation": {
+             "required": true
+            }
+           },
+           {
+            "name": "description",
+            "label": "Description",
+            "type": "text",
+            "dataPath": "description",
+            "validation": {
+             "required": false
+            }
+           },
+           {
+            "name": "customerFacing",
+            "label": "Customer Facing",
+            "type": "checkbox",
+            "dataPath": "customerFacing",
+            "validation": {
+             "required": false
+            }
+           }
+          ]
+         },
+         {
+          "type": "mutation",
+          "api": "Application",
+          "transforms": {
+           "pre": "{ \"payload\": { \"create\": data } }"
+          },
+          "mutation": "mutation CreateAsset($payload: [AssetCreatePayloadInput!]!) {\n  mutation: createAsset(payload: $payload) {\n    id\n    name\n  }\n}"
+         },
+         {
+          "type": "transformation",
+          "transformation": "$components.AssetTable.fn.search()",
+          "remote": false
+         }
+        ],
+        "text": "Create",
+        "title": "Create",
+        "icon": {
+         "icon": "plus",
+         "variant": "regular"
+        }
+       },
+       "displayName": "Action",
+       "custom": {},
+       "parent": "m6Yk0yKCmE",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "V0Y6WwY4AY": {
+       "type": {
+        "resolvedName": "ActionButton"
+       },
+       "isCanvas": false,
+       "props": {
+        "margin": 0,
+        "buttonColor": "secondary",
+        "width": "auto",
+        "height": "auto",
+        "disabled": {
+         "__transform": "$count($components.AssetTable.selectedRows) != 1",
+         "__dynamicFields": {
+          "payload": [],
+          "context": [
+           "components.AssetTable.selectedRows"
+          ]
+         },
+         "__cacheKey": "updateDisabled",
+         "__remote": false
+        },
+        "hidden": false,
+        "useIconButton": false,
+        "disableHover": false,
+        "disableRipple": false,
+        "action": [
+         {
+          "type": "form",
+          "title": "Update Asset Library",
+          "submitIcon": {
+           "icon": "save",
+           "variant": "regular"
+          },
+          "transforms": {
+           "pre": "$components.AssetTable.selectedRows[0]"
+          },
+          "fields": [
+           {
+            "name": "name",
+            "label": "Name",
+            "type": "text",
+            "dataPath": "name",
+            "validation": {
+             "required": true
+            }
+           },
+           {
+            "name": "description",
+            "label": "Description",
+            "type": "text",
+            "dataPath": "description",
+            "validation": {
+             "required": false
+            }
+           },
+           {
+            "name": "customerFacing",
+            "label": "Customer Facing",
+            "type": "checkbox",
+            "dataPath": "customerFacing",
+            "validation": {
+             "required": false
+            }
+           }
+          ]
+         },
+         {
+          "type": "mutation",
+          "api": "Application",
+          "transforms": {
+           "pre": "{ \"payload\": [{ \"where\": { \"id\": $components.AssetTable.selectedRows[0].id }, \"update\": data }] }"
+          },
+          "mutation": "mutation UpdateAsset($payload: [AssetUpdatePayloadInput!]!) {\n  mutation: updateAsset(payload: $payload) {\n    id\n    name\n  }\n}"
+         },
+         {
+          "type": "transformation",
+          "transformation": "$components.AssetTable.fn.search()",
+          "remote": false
+         }
+        ],
+        "text": "Update",
+        "title": "Update",
+        "icon": {
+         "icon": "pencil",
+         "variant": "regular"
+        }
+       },
+       "displayName": "Action",
+       "custom": {},
+       "parent": "SEWGiisuac",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "V8a0oKOqwA": {
+       "type": {
+        "resolvedName": "ActionButton"
+       },
+       "isCanvas": false,
+       "props": {
+        "margin": 0,
+        "buttonColor": "error",
+        "width": "auto",
+        "height": "auto",
+        "disabled": {
+         "__transform": "$count($components.AssetTable.selectedRows) = 0",
+         "__dynamicFields": {
+          "payload": [],
+          "context": [
+           "components.AssetTable.selectedRows"
+          ]
+         },
+         "__cacheKey": "deleteDisabled",
+         "__remote": false
+        },
+        "hidden": false,
+        "useIconButton": false,
+        "disableHover": false,
+        "disableRipple": false,
+        "action": [
+         {
+          "type": "confirmation",
+          "buttonColor": "error",
+          "submitIcon": {
+           "icon": "trash",
+           "variant": "solid"
+          },
+          "message": {
+           "__transform": "\"Delete \" & $count($components.AssetTable.selectedRows) & \" record(s)? Rows already referenced by a record cannot be deleted.\"",
+           "__dynamicFields": {
+            "payload": [],
+            "context": [
+             "components.AssetTable.selectedRows"
+            ]
+           },
+           "__cacheKey": "deleteMsg",
+           "__remote": false
+          }
+         },
+         {
+          "type": "mutation",
+          "api": "Application",
+          "transforms": {
+           "pre": "{ \"payload\": $components.AssetTable.selectedRows.{ \"where\": { \"id\": id } } }"
+          },
+          "mutation": "mutation DeleteAsset($payload: [AssetDeletePayloadInput!]!) {\n  mutation: deleteAsset(payload: $payload) {\n    id\n    name\n  }\n}"
+         },
+         {
+          "type": "transformation",
+          "transformation": "$components.AssetTable.fn.search()",
+          "remote": false
+         }
+        ],
+        "text": "Delete",
+        "title": "Delete",
+        "icon": {
+         "icon": "trash",
+         "variant": "solid"
+        }
+       },
+       "displayName": "Action",
+       "custom": {},
+       "parent": "fiiqwCucGq",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "YuowuCqymo": {
+       "type": {
+        "resolvedName": "ActionButton"
+       },
+       "isCanvas": false,
+       "props": {
+        "margin": 0,
+        "buttonColor": "primary",
+        "width": "auto",
+        "height": "auto",
+        "disabled": false,
+        "hidden": false,
+        "useIconButton": false,
+        "disableHover": false,
+        "disableRipple": false,
+        "action": [
+         {
+          "type": "transformation",
+          "transformation": "$components.AssetTable.fn.search()",
+          "remote": false
+         }
+        ],
+        "text": "Search",
+        "title": "Search",
+        "icon": {
+         "icon": "search",
+         "variant": "duotone",
+         "size": "icon"
+        }
+       },
+       "displayName": "Action",
+       "custom": {},
+       "parent": "Osmy0IWyCG",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "cGWGOYOoiy": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexWrap": false,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "width": "auto",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": false,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {},
+        "gap": "0px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "74sgKeYOoi",
+       "hidden": false,
+       "nodes": [
+        "XGGMSU8iMe"
+       ],
+       "linkedNodes": {}
+      },
+      "m6Yk0yKCmE": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexWrap": false,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "width": "auto",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": false,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {},
+        "gap": "0px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "74sgKeYOoi",
+       "hidden": false,
+       "nodes": [
+        "qOCY6wq8Sk"
+       ],
+       "linkedNodes": {}
+      },
+      "SEWGiisuac": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexWrap": false,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "width": "auto",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": false,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {},
+        "gap": "0px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "74sgKeYOoi",
+       "hidden": false,
+       "nodes": [
+        "V0Y6WwY4AY"
+       ],
+       "linkedNodes": {}
+      },
+      "fiiqwCucGq": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexWrap": false,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "width": "auto",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": false,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {},
+        "gap": "0px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "74sgKeYOoi",
+       "hidden": false,
+       "nodes": [
+        "V8a0oKOqwA"
+       ],
+       "linkedNodes": {}
+      },
+      "Osmy0IWyCG": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexWrap": false,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "width": "auto",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": false,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {},
+        "gap": "0px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "74sgKeYOoi",
+       "hidden": false,
+       "nodes": [
+        "YuowuCqymo"
+       ],
+       "linkedNodes": {}
+      },
+      "74sgKeYOoi": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexWrap": true,
+        "flexDirection": "row",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-end",
+        "width": "100%",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": false,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {
+         "gap": 10
+        },
+        "gap": "8px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "ZAMYwAIWQ4",
+       "hidden": false,
+       "nodes": [
+        "cGWGOYOoiy",
+        "m6Yk0yKCmE",
+        "SEWGiisuac",
+        "fiiqwCucGq",
+        "Osmy0IWyCG"
+       ],
+       "linkedNodes": {}
+      },
+      "N6Y80eSoqY": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Id",
+        "format": "text",
+        "sortable": true,
+        "field": "id",
+        "dataPath": "id",
+        "description": ""
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn1"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "fgEWoKIiqc": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Name",
+        "format": "text",
+        "sortable": true,
+        "field": "name",
+        "dataPath": "name",
+        "description": ""
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn2"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "YoQ6MKWC4k": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Description",
+        "format": "text",
+        "sortable": true,
+        "field": "description",
+        "dataPath": "description",
+        "description": ""
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn3"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "UkKYmcoGEg": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Customer Facing",
+        "format": "checkmark",
+        "sortable": true,
+        "field": "customerFacing",
+        "dataPath": "customerFacing",
+        "description": ""
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn4"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "KQC8UsySe6": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Bunny Library",
+        "format": "text",
+        "sortable": true,
+        "field": "bunnyLibraryName",
+        "dataPath": "bunnyLibraryName",
+        "description": ""
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn5"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "j2iKM6KGo6": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Bunny Collection",
+        "format": "text",
+        "sortable": true,
+        "field": "bunnyCollectionName",
+        "dataPath": "bunnyCollectionName",
+        "description": ""
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn6"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "RUuI60KCeY": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Length (s)",
+        "format": "integer",
+        "sortable": true,
+        "field": "lengthSeconds",
+        "dataPath": "lengthSeconds",
+        "description": "",
+        "editable": false,
+        "sortAsNumber": false
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn7"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "YSEukg6024": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Share URL",
+        "format": "text",
+        "sortable": true,
+        "field": "shareUrl",
+        "dataPath": "shareUrl",
+        "description": "",
+        "linkTarget": {
+         "__transform": "{ \"url\": data.shareUrl, \"newWindow\": true }",
+         "__dynamicFields": {
+          "payload": [],
+          "context": []
+         },
+         "__cacheKey": "shareUrlLink",
+         "__remote": false
+        }
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn8"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "5OYQuWegcq": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Thumbnail",
+        "format": "image",
+        "sortable": false,
+        "field": "thumbnail",
+        "dataPath": "thumbnail",
+        "description": "",
+        "width": "125",
+        "linkTarget": {
+         "__transform": "{ \"url\": data.shareUrl, \"newWindow\": true }",
+         "__dynamicFields": {
+          "payload": [],
+          "context": []
+         },
+         "__cacheKey": "shareUrlLink",
+         "__remote": false
+        },
+        "query": {
+         "fields": [
+          "thumbnailUrl"
+         ]
+        },
+        "editable": false,
+        "sortAsNumber": false,
+        "data": {
+         "__transform": "$not($isNilOrEmpty(data.thumbnail.name)) ? data : null",
+         "__dynamicFields": {
+          "payload": null,
+          "context": []
+         },
+         "__cacheKey": "",
+         "__remote": false
+        },
+        "showColumnSuppressMenu": false,
+        "style": {
+         "alignItems": "center",
+         "justifyContent": "center"
+        }
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn9"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "q6GKWgyWqk": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Uploaded",
+        "format": "datetime",
+        "sortable": true,
+        "field": "dateUploaded",
+        "dataPath": "dateUploaded",
+        "description": ""
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn10"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "Yi2CQ0IKEM": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Sync State",
+        "format": "text",
+        "sortable": true,
+        "field": "syncState",
+        "dataPath": "syncState",
+        "description": ""
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn11"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "dyWoociIGu": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Synched At",
+        "format": "datetime",
+        "sortable": true,
+        "field": "synchedAt",
+        "dataPath": "synchedAt",
+        "description": ""
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn12"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "804K6MoEYA": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": "Bunny Guid",
+        "format": "text",
+        "sortable": true,
+        "field": "bunnyVideoGuid",
+        "dataPath": "bunnyVideoGuid",
+        "description": ""
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn13"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "OoGo6mscie": {
+       "type": {
+        "resolvedName": "Table"
+       },
+       "isCanvas": true,
+       "props": {
+        "margin": 8,
+        "width": "100%",
+        "height": "auto",
+        "flexGrow": true,
+        "query": {
+         "api": "Application",
+         "model": "Asset",
+         "query": null,
+         "dataPath": "edges",
+         "dataTransform": {
+          "transform": null,
+          "remote": true
+         },
+         "dataSubscription": {
+          "enabled": false
+         },
+         "autoLoad": true,
+         "fields": [
+          "id",
+          "shareUrl",
+          "thumbnailUrl",
+          "name",
+          "thumbnail"
+         ]
+        },
+        "selectable": "multiple",
+        "showToolPanels": false,
+        "showStatusBar": true,
+        "enableGrouping": true,
+        "enableCharts": true,
+        "showColumnMenu": true,
+        "enableRowDragging": false,
+        "disableColumnDragging": false,
+        "disableDragLeaveHidesColumns": false,
+        "masterDetail": false,
+        "hideTableHeader": false,
+        "padding": 0,
+        "visible": true,
+        "label": "Asset Library",
+        "filterFormName": "AssetFilters",
+        "rowMultiSelectWithClick": false,
+        "limitToOneActiveDetail": false,
+        "views": [
+         {
+          "unique": false,
+          "fields": [],
+          "name": "Default",
+          "rowLimit": 1000,
+          "isDefault": true,
+          "columns": [
+           {
+            "id": "TableColumnPlay",
+            "label": " "
+           },
+           {
+            "id": "TableColumn2",
+            "label": "Name"
+           },
+           {
+            "id": "TableColumn3",
+            "label": "Description"
+           },
+           {
+            "id": "TableColumn4",
+            "label": "Customer Facing"
+           },
+           {
+            "id": "TableColumn5",
+            "label": "Bunny Library"
+           },
+           {
+            "id": "TableColumn6",
+            "label": "Bunny Collection"
+           },
+           {
+            "id": "TableColumn7",
+            "label": "Length (s)"
+           },
+           {
+            "id": "TableColumn8",
+            "label": "Share URL"
+           },
+           {
+            "id": "TableColumn9",
+            "label": "Thumbnail"
+           },
+           {
+            "id": "TableColumn10",
+            "label": "Uploaded"
+           },
+           {
+            "id": "TableColumn12",
+            "label": "Synched At"
+           },
+           {
+            "id": "TableColumn11",
+            "label": "Sync State"
+           },
+           {
+            "id": "TableColumn1",
+            "label": "Id"
+           }
+          ]
+         }
+        ]
+       },
+       "displayName": "Table",
+       "custom": {
+        "elementName": "AssetTable"
+       },
+       "parent": "yqMU8IgAAk",
+       "hidden": false,
+       "nodes": [
+        "eR2GvnIiOe",
+        "N6Y80eSoqY",
+        "KQC8UsySe6",
+        "j2iKM6KGo6",
+        "5OYQuWegcq",
+        "AssetPlayCol",
+        "fgEWoKIiqc",
+        "YoQ6MKWC4k",
+        "UkKYmcoGEg",
+        "RUuI60KCeY",
+        "YSEukg6024",
+        "q6GKWgyWqk",
+        "Yi2CQ0IKEM",
+        "dyWoociIGu",
+        "804K6MoEYA"
+       ],
+       "linkedNodes": {}
+      },
+      "yqMU8IgAAk": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexWrap": false,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "width": "100%",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": true,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {},
+        "gap": "0px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "ZAMYwAIWQ4",
+       "hidden": false,
+       "nodes": [
+        "OoGo6mscie"
+       ],
+       "linkedNodes": {}
+      },
+      "aMCIAaSIx2": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexWrap": false,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "width": "100%",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": false,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {},
+        "gap": "0px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "ZAMYwAIWQ4",
+       "hidden": false,
+       "nodes": [
+        "tqomUyKoQo"
+       ],
+       "linkedNodes": {}
+      },
+      "ZAMYwAIWQ4": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexWrap": false,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "width": "100%",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": true,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {},
+        "gap": "12px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "ROOT",
+       "hidden": false,
+       "nodes": [
+        "aMCIAaSIx2",
+        "74sgKeYOoi",
+        "yqMU8IgAAk"
+       ],
+       "linkedNodes": {}
+      },
+      "ROOT": {
+       "type": {
+        "resolvedName": "Screen"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexDirection": "column",
+        "flexWrap": false,
+        "alignItems": "stretch",
+        "justifyContent": "flex-start",
+        "width": "100%",
+        "height": "100%",
+        "hidden": false,
+        "flexGrow": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "flowsDelay": 0,
+        "removeOuterMargin": false
+       },
+       "displayName": "Screen",
+       "custom": {
+        "elementName": "Screen",
+        "elementCounts": {
+         "Container": 10,
+         "Form": 1,
+         "Table": 1,
+         "Action": 5,
+         "TableColumn": 13,
+         "Table Column": 1,
+         "File": 1
+        }
+       },
+       "parent": null,
+       "hidden": false,
+       "nodes": [
+        "ZAMYwAIWQ4"
+       ],
+       "linkedNodes": {}
+      },
+      "AssetPlayCol": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": " ",
+        "format": "action",
+        "sortable": false,
+        "dataPath": "none",
+        "width": "60px",
+        "wrapText": false,
+        "showColumnSuppressMenu": false,
+        "style": {
+         "alignItems": "center",
+         "justifyContent": "center"
+        },
+        "query": {
+         "fields": []
+        },
+        "editable": false,
+        "flows": [],
+        "actions": [
+         {
+          "icon": {
+           "icon": "play",
+           "color": "primary",
+           "variant": "light",
+           "size": "icon"
+          },
+          "action": [
+           {
+            "type": "screenDialog",
+            "screenId": "assetPlayerDialog",
+            "screenName": "AssetPlayerDialog",
+            "title": {
+             "__transform": "data.name",
+             "__dynamicFields": {
+              "payload": [],
+              "context": []
+             },
+             "__cacheKey": "playerTitle",
+             "__remote": false
+            },
+            "screenParams": {
+             "__transform": "{ \"shareUrl\": data.shareUrl }",
+             "__dynamicFields": {
+              "payload": [],
+              "context": []
+             },
+             "__cacheKey": "playerParams",
+             "__remote": false
+            },
+            "canvasDialog": {
+             "fullWidth": true,
+             "maxWidth": "lg",
+             "includeSubmit": false,
+             "includeCancel": true
+            }
+           }
+          ],
+          "useIconButton": true,
+          "disabled": false,
+          "hidden": false
+         }
+        ],
+        "isFlow": false,
+        "menuIcon": {
+         "icon": "play",
+         "variant": "solid"
+        },
+        "iconSize": "small",
+        "sortAsNumber": false
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumnPlay"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "eR2GvnIiOe": {
+       "type": {
+        "resolvedName": "TableColumn"
+       },
+       "isCanvas": false,
+       "props": {
+        "label": " ",
+        "format": "text",
+        "sortable": true,
+        "dataPath": "id",
+        "query": {
+         "fields": []
+        }
+       },
+       "displayName": "Table Column",
+       "custom": {
+        "elementName": "TableColumn1"
+       },
+       "parent": "OoGo6mscie",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      }
+     }
+    }
+   }
+  ]
+ }
+}

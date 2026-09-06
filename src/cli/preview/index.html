@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Fuuz Dev Console</title>
+  <link rel="stylesheet" href="./screenrunner.css">
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    /*
+     * Host shim for the Fuuz Dev Console panel outside VS Code.
+     *
+     * The panel is written against the webview contract: it posts `ready` and
+     * then listens for `{ type: 'data', payload }` messages. Here the payloads
+     * arrive over Server-Sent Events from the local capture process, so the same
+     * bundle VS Code loads runs unmodified — and updates live.
+     */
+    let latest = null;
+    let panelReady = false;
+
+    const deliver = (payload) => {
+      window.dispatchEvent(new MessageEvent('message', { data: { type: 'data', payload } }));
+    };
+
+    window.acquireVsCodeApi = () => ({
+      postMessage(msg) {
+        if (msg.type === 'ready') {
+          panelReady = true;
+          if (latest) deliver(latest);
+          return;
+        }
+        // `clear` and `reattach` act on the capture process; the rest are
+        // panel-local and need no host.
+        if (msg.type === 'clear' || msg.type === 'reattach') {
+          fetch('./command', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(msg),
+          }).catch(() => undefined);
+        }
+      },
+    });
+
+    const events = new EventSource('./events');
+    events.onmessage = (ev) => {
+      try { latest = JSON.parse(ev.data); } catch { return; }
+      if (panelReady) deliver(latest);
+    };
+    events.onerror = () => {
+      // EventSource reconnects on its own; surface the gap in the title bar so a
+      // stalled capture process isn't mistaken for a quiet screen.
+      document.title = 'Fuuz Dev Console — reconnecting…';
+    };
+    events.onopen = () => { document.title = 'Fuuz Dev Console'; };
+
+    const script = document.createElement('script');
+    script.src = './screenrunner.js';
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>

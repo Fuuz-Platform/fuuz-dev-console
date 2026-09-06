@@ -1,0 +1,905 @@
+/*
+ * Fuuz Dev Console console.
+ *
+ * Deliberately NOT themed to the VS Code colour theme: this is a console over a
+ * Fuuz screen, and it reads as the platform — charcoal chrome, amber accents —
+ * so what you see here matches what you see in the browser next to it. Palette
+ * values are the platform tokens (_ds/…/tokens/platform.css), inlined because a
+ * webview can't reach the design-system stylesheet.
+ */
+:root {
+  --amber:        #FF9804;  /* --fp-amber-bright */
+  --amber-text:   #F0A500;  /* --fp-amber-text   */
+  --amber-dim:    #FFB84D;
+  --chrome:       #2B2B2B;  /* --fp-charcoal     */
+  --bg:           #161616;
+  --bg-log:       #1A1A1A;
+  --bg-state:     #1E1E1E;
+  --bg-head:      #232323;
+  --bg-entry:     #1E1E1E;
+  --bg-entry-head:#242424;
+  --line:         #2E2E2E;
+  --line-strong:  #3A3A3A;
+  --fg:           #E4E4E4;
+  --fg-dim:       #9A9A9A;
+  --fg-faint:     #6E6E6E;
+
+  --err:          #F14C4C;
+  --err-bg:       #241717;
+  --err-head:     #331A1A;
+  --err-border:   #5A1F1F;
+  --err-text:     #F98C8C;
+
+  --sel-bg:       #33291A;
+  --chip-on-bg:   #3D3116;
+  --chip-on-bd:   #7A5C1E;
+
+  --badge-query:  #2F5D7C;  /* --fp-tool-fuuz      */
+  --badge-xform:  #8A63C4;  /* --fp-node-transform */
+  --badge-flow:   #86994F;  /* --fp-node-fuuz      */
+  --badge-log:    #4A4A4A;
+
+  --tok-key:      #9CDCFE;
+  --tok-str:      #CE9178;
+  --tok-num:      #B5CEA8;
+  --tok-bool:     #569CD6;
+  --tok-punc:     #8A8A8A;
+
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --sans: Roboto, -apple-system, 'Segoe UI', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 12px; }
+#root { height: 100vh; display: flex; flex-direction: column; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ── Top bar ───────────────────────────────────────────────────────────── */
+.topbar {
+  display: flex; align-items: center; gap: 14px; padding: 0 12px; height: 44px;
+  background: var(--chrome); border-bottom: 1px solid #111; flex: none;
+}
+.topbar h1 { font-size: 14px; font-weight: 600; letter-spacing: .2px; margin: 0; }
+.topbar .sub {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--sans); font-size: 11.5px; color: var(--fg-dim);
+  white-space: nowrap; overflow: hidden; min-width: 0; max-width: 44%;
+}
+/* The screen name is the identity — it truncates last and reads first. */
+.topbar .screenname { color: var(--fg); font-weight: 500; overflow: hidden; text-overflow: ellipsis; }
+.topbar .statusdetail { color: var(--amber-dim); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.topbar .sub.err .statusdetail { color: var(--err-text); }
+
+/* Connection state as a colour, not a word. */
+.statedot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--line-strong); }
+.statedot.attached  { background: #86994F; box-shadow: 0 0 0 2.5px rgba(134,153,79,.18); }
+.statedot.connecting { background: var(--amber); }
+.statedot.detached  { background: var(--fg-faint); }
+.statedot.error     { background: var(--err); box-shadow: 0 0 0 2.5px rgba(241,76,76,.18); }
+.topbar .sub.err { color: var(--err-text); }
+.spacer { margin-left: auto; }
+.modes { display: flex; align-items: center; gap: 6px; }
+
+.btn {
+  display: flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px;
+  border-radius: 4px; border: 1px solid #3D3D3D; background: transparent;
+  color: #B9B9B9; cursor: pointer; font: inherit; white-space: nowrap;
+}
+.btn:hover { border-color: #5E5E5E; color: var(--fg); }
+.btn.on { background: var(--chip-on-bg); color: var(--amber-dim); }
+
+/* ── Layout ────────────────────────────────────────────────────────────── */
+.panes { flex: 1; display: flex; min-height: 0; }
+.pane { min-width: 0; display: flex; flex-direction: column; }
+.pane.log { background: var(--bg-log); border-right: 1px solid var(--line); }
+.pane.state { background: var(--bg-state); }
+
+.panehead {
+  display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 10px;
+  background: var(--bg-head); border-bottom: 1px solid var(--line); flex: none;
+}
+.panehead .label {
+  font-size: 11px; font-weight: 600; letter-spacing: .7px;
+  text-transform: uppercase; color: var(--fg-dim); white-space: nowrap;
+}
+.panehead .count { font-family: var(--mono); font-size: 11px; color: #7A7A7A; white-space: nowrap; }
+
+.filter {
+  flex: 1; min-width: 0; height: 24px; padding: 0 8px; font: inherit; font-size: 12px;
+  background: var(--bg); border: 1px solid var(--line-strong); border-radius: 4px;
+  color: var(--fg); outline: none;
+}
+.filter:focus { border-color: #5E5E5E; }
+
+.scroll { flex: 1; overflow: auto; }
+
+/* ── Tracing banner ────────────────────────────────────────────────────── */
+.tracebar {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+  background: #2A2213; border-bottom: 1px solid #4A3A14; flex: none;
+}
+.tracebar .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); flex: none; }
+.tracebar .title { font-size: 11px; color: var(--amber-dim); letter-spacing: .4px; }
+.tracebar .title code { font-family: var(--mono); color: #F0F0F0; }
+.tracebar .note { font-size: 11px; color: #9A8B6E; margin-top: 2px; }
+
+/* ── Log entries ───────────────────────────────────────────────────────── */
+.entry {
+  margin: 0 8px 6px; border-radius: 5px; overflow: hidden;
+  border: 1px solid var(--line); background: var(--bg-entry);
+}
+.entry.error { border-color: var(--err-border); background: var(--err-bg); }
+.entry.focus { border-color: var(--amber); }
+
+.entry > .head {
+  display: flex; align-items: center; gap: 8px; padding: 6px 9px;
+  cursor: pointer; background: var(--bg-entry-head);
+}
+.entry.error > .head { background: var(--err-head); }
+.entry > .head:hover { filter: brightness(1.15); }
+
+.badge {
+  width: 16px; height: 16px; border-radius: 3px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: #FFF; background: var(--badge-log);
+}
+.badge.query { background: var(--badge-query); }
+.badge.debug { background: var(--badge-xform); }
+.badge.flow  { background: var(--badge-flow); }
+.badge.error { background: var(--err); }
+
+.entry .title {
+  font-size: 12px; color: var(--amber-text); text-decoration: underline;
+  text-underline-offset: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.entry.error .title { color: var(--err-text); }
+.entry .ts, .entry .dur { font-family: var(--mono); font-size: 10px; color: var(--fg-faint); flex: none; }
+.entry .dur { color: #8A8A8A; }
+
+.writechip {
+  display: flex; align-items: center; gap: 4px; height: 18px; padding: 0 7px; flex: none;
+  border-radius: 9px; background: #2E2E2E; border: 1px solid #3F3F3F;
+  color: #B9B9B9; font-family: var(--mono); font-size: 10px; cursor: pointer;
+  max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.writechip:hover { border-color: var(--amber); color: var(--amber); }
+
+/* Capture serial. Dim by design: it is the tiebreak you reach for when the
+   clock lies, not something to read on every row. */
+.entry .seq { font-family: var(--mono); font-size: 10px; color: var(--fg-faint); flex: none; }
+
+/* The screen event a row belongs to. A root — the interaction itself — is stated;
+   a follower is inferred from order, so it is drawn quieter than its root. */
+.evtchip {
+  display: flex; align-items: center; height: 16px; padding: 0 6px; flex: none;
+  border-radius: 8px; background: transparent; border: 1px dashed #3F3F3F;
+  color: #8A8A8A; font-size: 10px; cursor: pointer;
+  max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.evtchip.root { border-style: solid; border-color: #5A4A24; color: var(--amber-dim); }
+.evtchip:hover { border-color: var(--amber); color: var(--amber); }
+.evtchip em { font-style: normal; opacity: .6; margin-left: 3px; }
+
+.logfoot .keep { display: flex; align-items: center; gap: 5px; color: #7A7A7A; }
+.logfoot .keep select {
+  background: var(--bg-entry); color: #C4C4C4; border: 1px solid var(--line);
+  border-radius: 4px; font: inherit; font-size: 11px; padding: 1px 4px;
+}
+
+.body { padding: 6px 10px 8px; font-family: var(--mono); font-size: 11.5px; line-height: 1.65; }
+.body .ln { white-space: pre; overflow: hidden; text-overflow: ellipsis; }
+.body .origin { color: var(--fg-faint); font-size: 10.5px; margin-top: 6px; }
+.tok-key  { color: var(--tok-key); }
+.tok-str  { color: var(--tok-str); }
+.tok-num  { color: var(--tok-num); }
+.tok-bool { color: var(--tok-bool); }
+.tok-punc { color: var(--tok-punc); }
+.tok-err  { color: var(--err); }
+
+/* ── Log footer ────────────────────────────────────────────────────────── */
+.logfoot {
+  height: 30px; flex: none; display: flex; align-items: center; gap: 10px; padding: 0 10px;
+  background: var(--bg-head); border-top: 1px solid var(--line); color: #8A8A8A; font-size: 11px;
+}
+.toggle { display: flex; align-items: center; gap: 7px; cursor: pointer; color: #7A7A7A; background: none; border: 0; font: inherit; }
+.toggle.on { color: #C4C4C4; }
+.track { width: 26px; height: 14px; border-radius: 7px; background: var(--line-strong); position: relative; display: block; }
+.toggle.on .track { background: #955F03; }
+.knob { position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; border-radius: 50%; background: #F0F0F0; }
+.toggle.on .knob { left: 14px; }
+
+/* ── State tree ────────────────────────────────────────────────────────── */
+.legend {
+  display: flex; align-items: center; gap: 12px; padding: 5px 10px; flex: none;
+  background: #1B1B1B; border-bottom: 1px solid var(--line);
+  color: var(--fg-faint); font-size: 10.5px; letter-spacing: .4px;
+}
+.legend span { display: flex; align-items: center; gap: 5px; }
+.legend .swatch { width: 7px; height: 7px; border-radius: 2px; background: var(--amber); display: block; }
+.legend code { font-family: var(--mono); color: #B9B9B9; }
+
+.treerow {
+  display: flex; align-items: center; gap: 6px; height: 23px; padding-right: 10px;
+  cursor: pointer; border-left: 2px solid transparent; width: 100%;
+  background: none; border-top: 0; border-right: 0; border-bottom: 0; font: inherit; text-align: left;
+}
+.treerow:hover { background: #2A2A2A; }
+.treerow.sel { background: var(--sel-bg); border-left-color: var(--amber); }
+.treerow .caret { width: 12px; color: #7A7A7A; font-size: 9px; flex: none; }
+.treerow .icon { width: 9px; height: 9px; border-radius: 50%; background: #4A4A4A; flex: none; }
+.treerow.group .icon { border-radius: 2px; background: var(--badge-xform); }
+.treerow.group.d0 .icon { background: #5B93CC; }
+.treerow.group.d1 .icon { background: var(--badge-flow); }
+.treerow .label { font-family: var(--mono); font-size: 11.5px; color: var(--tok-key); white-space: nowrap; flex: none; }
+.treerow.group .label { color: var(--fg); }
+.treerow .type { font-size: 10px; color: var(--fg-faint); flex: none; }
+.treerow .value { font-family: var(--mono); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.treerow .right { margin-left: auto; display: flex; align-items: center; gap: 6px; flex: none; }
+.treerow .changed { width: 7px; height: 7px; border-radius: 2px; background: var(--amber); display: block; }
+
+.tracechip {
+  display: flex; align-items: center; height: 17px; padding: 0 6px; border-radius: 9px;
+  background: #2A2A2A; border: 1px solid var(--line-strong); color: var(--fg-dim);
+  font-family: var(--mono); font-size: 10px; cursor: pointer;
+}
+.treerow.sel .tracechip { background: var(--chip-on-bg); border-color: var(--chip-on-bd); color: var(--amber-dim); }
+.tracechip:hover { border-color: var(--amber); color: var(--amber); }
+
+/* ── Trace timeline ────────────────────────────────────────────────────── */
+.trace { flex: none; max-height: 44%; overflow: auto; border-top: 1px solid var(--line-strong); background: #191919; }
+.trace > .head {
+  position: sticky; top: 0; display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+  background: var(--bg-head); border-bottom: 1px solid var(--line);
+}
+.trace .path { font-family: var(--mono); font-size: 11px; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.trace .val { font-family: var(--mono); font-size: 11.5px; color: var(--tok-str); margin: 10px 12px; word-break: break-all; }
+.focusbtn { border-color: var(--chip-on-bd); color: var(--amber-dim); background: #2E2515; }
+.focusbtn.on { background: #4A3A14; }
+
+.step { display: flex; gap: 9px; padding: 7px 8px; border-radius: 4px; cursor: pointer; background: none; border: 0; font: inherit; width: 100%; text-align: left; }
+.step:hover { background: #262626; }
+.step.on { background: #2E2515; }
+.step .rail { flex: none; display: flex; flex-direction: column; align-items: center; gap: 3px; align-self: stretch; }
+.step .n {
+  width: 17px; height: 17px; border-radius: 50%; background: var(--line-strong); color: #C4C4C4;
+  font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none;
+}
+.step.on .n { background: var(--amber); color: #1F1F1F; }
+.step.err .n { background: var(--err); color: #1F1F1F; }
+.step .wire { width: 1px; flex: 1; background: var(--line-strong); display: block; }
+.step:last-child .wire { background: transparent; }
+.step .main { min-width: 0; flex: 1; }
+.step .row1 { display: flex; align-items: center; gap: 8px; }
+.step .stitle { font-size: 11.5px; color: var(--fg); }
+.step.err .stitle { color: var(--err-text); }
+.step .meta { font-family: var(--mono); font-size: 10px; color: var(--fg-faint); }
+.step .expr, .step .delta {
+  display: block; font-family: var(--mono); font-size: 11px; margin-top: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.step .expr { color: #8FA8C4; }
+.step .delta { color: #7A7A7A; }
+.step .delta .after { color: var(--tok-str); }
+
+/* ── Empty / status states ─────────────────────────────────────────────── */
+.empty { padding: 28px 24px; color: var(--fg-dim); line-height: 1.7; max-width: 620px; }
+.empty h2 { font-size: 13px; color: var(--fg); margin: 0 0 8px; }
+.empty code { font-family: var(--mono); color: var(--amber-text); }
+.empty .actions { display: flex; gap: 8px; margin-top: 16px; }
+.empty.err { color: var(--err-text); }
+
+/* ── Design join ───────────────────────────────────────────────────────── */
+/* The element type the runtime never tells you — it comes from the screen
+   design in the extension's tenant artifacts. */
+.etype {
+  font-style: normal; font-size: 9.5px; letter-spacing: .3px; text-transform: uppercase;
+  padding: 0 4px; margin-left: 5px; border-radius: 3px;
+  background: var(--badge-xform); color: #fff; opacity: .85;
+}
+.etype.remote { background: var(--badge-query); }
+
+.legend.design { border-bottom: 1px solid var(--line); }
+.legend.design .ok { color: #86994F; }
+.legend.design .warn { color: var(--amber-dim); }
+.legend.design .never { color: var(--fg-dim); cursor: help; text-decoration: underline dotted; }
+
+/* ── Issues ────────────────────────────────────────────────────────────── */
+.btn.alert { border-color: var(--err); color: var(--err-text); }
+.panehead .count .sev { font-style: normal; margin-left: 8px; }
+.sev.high { color: var(--err-text); }
+.sev.medium { color: var(--amber-dim); }
+.sev.low { color: var(--fg-dim); }
+
+.issue { margin: 0 10px 10px; border: 1px solid var(--line); border-left-width: 3px; border-radius: 5px; background: var(--bg-entry); padding: 9px 11px; }
+.issue.sev-high { border-left-color: var(--err); background: var(--err-bg); }
+.issue.sev-medium { border-left-color: var(--amber); }
+.issue.sev-low { border-left-color: var(--line-strong); }
+
+.ihead { display: flex; align-items: center; gap: 8px; }
+.sevtag { font-size: 9.5px; text-transform: uppercase; letter-spacing: .5px; padding: 1px 5px; border-radius: 3px; flex: none; color: #fff; background: var(--badge-log); }
+.sevtag.high { background: var(--err); }
+.sevtag.medium { background: #955F03; }
+.sevtag.low { background: var(--line-strong); }
+.ititle { font-size: 12.5px; color: var(--fg); font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.icount { font-family: var(--mono); font-size: 10px; color: var(--amber-dim); flex: none; }
+.irule { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--fg-faint); flex: none; }
+.idetail { font-size: 11.5px; color: var(--fg-dim); line-height: 1.55; margin-top: 5px; }
+
+.ipath { display: inline-block; margin-top: 7px; font-family: var(--mono); font-size: 10.5px; padding: 2px 7px; border-radius: 9px; background: var(--chip-on-bg); border: 1px solid var(--chip-on-bd); color: var(--amber-dim); cursor: pointer; }
+.ipath:hover { border-color: var(--amber); color: var(--amber); }
+
+.itrace { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 7px; }
+.istep { display: flex; gap: 8px; padding: 3px 0; }
+.istep .n { flex: none; width: 18px; height: 18px; border-radius: 4px; background: var(--line-strong); color: #C4C4C4; font-family: var(--mono); font-size: 9.5px; display: flex; align-items: center; justify-content: center; }
+.istep .n.bad { background: var(--err); color: #1F1F1F; }
+.istep .body { min-width: 0; flex: 1; }
+.istep .row1 { display: flex; align-items: baseline; gap: 8px; font-size: 11.5px; color: var(--fg); }
+.istep .row1 .err { color: var(--err-text); }
+.istep .meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--fg-faint); flex: none; }
+.istep .delta, .istep .expr { display: block; font-family: var(--mono); font-size: 10.5px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.istep .delta { color: var(--tok-str); }
+.istep .expr { color: #8FA8C4; }
+.istep .expr.err { color: var(--err-text); }
+.imore { font-size: 10.5px; color: var(--fg-faint); padding-left: 26px; }
+
+/* ── Network ───────────────────────────────────────────────────────────── */
+.netrow { display: flex; align-items: center; gap: 10px; padding: 4px 12px; cursor: pointer; font-size: 11.5px; border-left: 2px solid transparent; }
+.netrow:hover { background: #2A2A2A; }
+.netrow.sel { background: var(--sel-bg); border-left-color: var(--amber); }
+.netrow.failed { border-left-color: var(--err); }
+.netrow.warn { border-left-color: var(--amber); }
+.netrow .ts, .netrow .dur, .netrow .size { font-family: var(--mono); font-size: 10px; color: var(--fg-faint); flex: none; }
+.netrow .status { font-family: var(--mono); font-size: 10.5px; flex: none; width: 52px; }
+.netrow .status.ok { color: #86994F; }
+.netrow .status.bad { color: var(--err); }
+.netrow .status.warn { color: var(--amber); }
+.netrow .method { font-family: var(--mono); font-size: 10px; color: var(--fg-dim); flex: none; width: 44px; }
+.netrow .path { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--fg); }
+.netrow .path b { color: var(--tok-key); font-weight: 500; }
+.netrow .dur { width: 54px; text-align: right; }
+.netrow .size { width: 60px; text-align: right; }
+.netdetail { padding: 6px 12px 10px 74px; font-family: var(--mono); font-size: 10.5px; line-height: 1.6; background: #191919; }
+.netdetail .ln { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Role, scratchpad ──────────────────────────────────────────────────── */
+.rolechip { margin-left: 8px; padding: 1px 6px; border-radius: 3px; background: var(--chip-on-bg); color: var(--amber-dim); font-family: var(--sans); font-size: 10px; }
+.rolechip.dim { background: #2E2E2E; color: var(--fg-dim); }
+
+.bindchip { font-family: var(--mono); font-size: 10px; padding: 1px 6px; border-radius: 3px; background: #2E2E2E; border: 1px solid var(--line-strong); color: var(--tok-key); cursor: pointer; }
+.bindchip:hover { border-color: var(--amber); color: var(--amber); }
+
+.exprbox {
+  flex: none; height: 108px; resize: vertical; margin: 8px 10px; padding: 8px 10px;
+  background: var(--bg); border: 1px solid var(--line-strong); border-radius: 4px;
+  color: var(--fg); font-family: var(--mono); font-size: 12px; line-height: 1.55; outline: none;
+}
+.exprbox:focus { border-color: var(--amber); }
+.resultbox { margin: 0 10px 10px; background: #191919; border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; }
+.resultbox pre { margin: 0; font-family: var(--mono); font-size: 11.5px; line-height: 1.6; color: var(--tok-str); white-space: pre-wrap; word-break: break-word; }
+.resultbox pre.tok-err { color: var(--err-text); }
+
+/* ── Self-diagnosis ────────────────────────────────────────────────────── */
+.diagbar {
+  flex: none; padding: 10px 14px; background: #2A2213; border-bottom: 1px solid #4A3A14;
+  color: #E8D9B5; font-size: 12px; line-height: 1.65;
+}
+.diagbar b { color: var(--amber-dim); }
+.diagbar code { font-family: var(--mono); color: #F0F0F0; }
+
+/* ── Structure ─────────────────────────────────────────────────────────── */
+.structrow { display: flex; align-items: baseline; gap: 8px; padding: 3px 12px 3px 0; cursor: pointer; font-size: 11.5px; border-left: 2px solid transparent; }
+.structrow:hover { background: #2A2A2A; border-left-color: #4E25E2; }
+.structrow.sel { background: var(--sel-bg); border-left-color: var(--amber); }
+.structrow.anon .ename { color: var(--fg-faint); }
+.ename { font-family: var(--mono); color: var(--fg); flex: none; }
+.etype2 { font-size: 10px; color: var(--tok-key); flex: none; }
+.elabel { font-size: 10.5px; color: var(--fg-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.efield { font-family: var(--mono); font-size: 10px; color: var(--tok-str); flex: none; }
+.eprops { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--badge-xform); flex: none; }
+
+.tdetail { border: 1px solid var(--line); border-radius: 5px; background: var(--bg-entry); padding: 8px 10px; margin-bottom: 9px; }
+.trow { display: flex; align-items: baseline; gap: 9px; }
+.tprop { font-family: var(--mono); font-size: 12px; color: var(--amber-text); }
+.tresult { font-family: var(--mono); font-size: 11.5px; color: var(--tok-str); min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.trow .meta { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--fg-faint); }
+.texpr { margin: 7px 0 0; padding: 7px 9px; background: #191919; border-radius: 4px; font-family: var(--mono); font-size: 11px; line-height: 1.55; color: #8FA8C4; white-space: pre-wrap; word-break: break-word; max-height: 140px; overflow: auto; }
+.tinputs { margin-top: 7px; border-top: 1px solid var(--line); padding-top: 6px; }
+.tinput { display: flex; gap: 10px; padding: 2px 0; font-family: var(--mono); font-size: 11px; }
+.tinput .tpath { color: var(--tok-key); flex: none; }
+.tinput .tval { color: var(--tok-str); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tinput.missing .tpath, .tinput.missing .tval { color: var(--err); }
+.legend .warn { color: var(--amber-dim); }
+
+/* ── Connect to Claude ─────────────────────────────────────────────────── */
+.connect-hero { border: 1px solid var(--line-strong); border-radius: 6px; background: var(--bg-entry); padding: 14px 16px; margin-bottom: 20px; }
+.connect-lead { font-size: 12.5px; line-height: 1.7; color: var(--fg); max-width: 70ch; }
+.connect-status { display: flex; align-items: center; gap: 10px; margin-top: 14px; font-size: 12px; color: var(--fg-dim); flex-wrap: wrap; }
+.connect-status .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.connect-status .dot.on { background: #86994F; box-shadow: 0 0 0 3px rgba(134,153,79,.18); }
+.connect-status .dot.warn { background: var(--amber); box-shadow: 0 0 0 3px rgba(255,152,4,.16); }
+.connect-status .dot.off { background: var(--line-strong); }
+.connect-status .btn:last-child { margin-left: auto; }
+.connect-err { margin-top: 8px; font-size: 11.5px; color: var(--err-text); }
+
+.connect-h { font-size: 11px; text-transform: uppercase; letter-spacing: .7px; color: var(--fg-dim); margin: 22px 0 10px; }
+.connect-steps { margin: 0; padding-left: 20px; font-size: 12.5px; line-height: 1.8; color: var(--fg-dim); max-width: 78ch; }
+.connect-steps li { margin-bottom: 12px; }
+.connect-steps b { color: var(--fg); }
+.connect-steps code, .connect-note code, .connect-tools code { font-family: var(--mono); font-size: 11.5px; color: var(--amber-text); }
+.connect-code { display: flex; align-items: center; gap: 10px; margin-top: 7px; padding: 9px 11px; background: #191919; border: 1px solid var(--line); border-radius: 4px; }
+.connect-code code { flex: 1; color: #C7D6E5; word-break: break-all; line-height: 1.5; }
+
+.connect-tools { border-collapse: collapse; font-size: 12px; }
+.connect-tools td { padding: 3px 18px 3px 0; color: var(--fg-dim); vertical-align: top; }
+.connect-tools td:first-child { white-space: nowrap; }
+
+.connect-note { margin-top: 18px; padding: 11px 13px; border-left: 2px solid var(--line-strong); background: #191919; font-size: 12px; line-height: 1.7; color: var(--fg-dim); max-width: 78ch; }
+.connect-note b { color: var(--fg); }
+.btn.claude { border-color: #4E25E2; color: #B9A6F5; }
+.btn.claude:hover { border-color: #6039E8; color: #D6C9FF; }
+.btn.claude.live { background: rgba(78,37,226,.22); color: #D6C9FF; }
+
+/* ── Copy affordances ──────────────────────────────────────────────────── */
+.copybits { display: none; align-items: center; gap: 3px; flex: none; }
+.treerow:hover .copybits, .treerow.sel .copybits { display: flex; }
+/* Property rows and the element tree use `.structrow`; without this the copy
+   buttons existed and could never be revealed. */
+.structrow:hover .copybits, .ename:hover .copybits { display: flex; }
+.copybits.dense { gap: 2px; margin-left: 6px; }
+.copybit {
+  font-family: var(--mono); font-size: 9.5px; line-height: 1; padding: 3px 5px;
+  border-radius: 3px; background: #2E2E2E; border: 1px solid var(--line-strong);
+  color: var(--fg-dim); cursor: pointer;
+}
+.copybit:hover { border-color: var(--amber); color: var(--amber); }
+.copybit.ok { border-color: #86994F; color: #86994F; }
+
+/* Structure rows, following the designer's own Screen Structure nomenclature:
+   an element-kind glyph, ElementName (Label), and a child count on the right. */
+.structrow { gap: 7px; padding: 4px 12px 4px 0; }
+.eicon { width: 11px; height: 11px; border-radius: 2px; flex: none; display: block; }
+.eicon.k-container { background: transparent; border: 1.5px solid #5B93CC; }
+.eicon.k-data      { background: var(--badge-xform); }
+.eicon.k-input     { background: #86994F; }
+.eicon.k-action    { background: var(--amber); }
+.eicon.k-column    { background: transparent; border: 1.5px solid #86994F; border-radius: 1px; }
+.eicon.k-embed     { background: var(--badge-query); }
+.eicon.k-other     { background: var(--line-strong); }
+.structrow .ename { font-family: var(--sans); font-size: 12px; color: var(--fg); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.structrow .elabel { color: var(--fg-dim); }
+.structrow .eprops { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--badge-xform); flex: none; }
+.structrow .ecount { font-family: var(--mono); font-size: 10.5px; color: var(--fg-faint); flex: none; width: 22px; text-align: right; }
+.connect-hint { margin-top: 6px; font-size: 11.5px; color: var(--fg-faint); }
+
+/* ── Tab targeting ─────────────────────────────────────────────────────── */
+.btn.target { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tabpicker { flex: none; background: #1B1B1B; border-bottom: 1px solid var(--line-strong); padding: 8px 0; }
+.tphead { padding: 4px 14px 8px; font-size: 11.5px; color: var(--fg-dim); line-height: 1.6; }
+.tphead b { color: var(--fg); font-family: var(--mono); }
+.tprow { display: flex; align-items: baseline; gap: 10px; padding: 5px 14px; cursor: pointer; font-size: 12px; border-left: 2px solid transparent; }
+.tprow:hover { background: #2A2A2A; border-left-color: var(--amber); }
+.tprow.cur { border-left-color: #86994F; }
+.tprow.muted { color: var(--fg-faint); cursor: default; }
+.tprow.muted:hover { background: none; border-left-color: transparent; }
+.tpname { color: var(--fg); flex: none; max-width: 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tpurl { font-family: var(--mono); font-size: 10.5px; color: var(--fg-faint); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tpbadge { margin-left: auto; font-size: 9.5px; text-transform: uppercase; letter-spacing: .4px; padding: 1px 5px; border-radius: 3px; background: #2E2E2E; color: var(--fg-dim); flex: none; }
+.tpbadge.cur { background: #2E3A22; color: #86994F; }
+
+/* ── Send to Claude: two honestly different paths ──────────────────────── */
+.connect-card { border: 1px solid var(--line-strong); border-radius: 6px; background: var(--bg-entry); padding: 13px 15px; margin-bottom: 16px; }
+.cc-head { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--fg); }
+.cc-badge { font-size: 9.5px; text-transform: uppercase; letter-spacing: .5px; padding: 2px 6px; border-radius: 3px; flex: none; }
+.cc-badge.any { background: #2E3A22; color: #A9C46C; }
+.cc-badge.live { background: rgba(78,37,226,.28); color: #B9A6F5; }
+.cc-body { font-size: 12px; line-height: 1.7; color: var(--fg-dim); margin-top: 9px; max-width: 76ch; }
+.cc-body b { color: var(--fg); }
+.cc-actions { display: flex; align-items: center; gap: 9px; margin-top: 12px; flex-wrap: wrap; }
+.cc-note { font-size: 11px; color: var(--fg-faint); }
+.btn.primary { background: #4E25E2; border-color: #4E25E2; color: #fff; }
+.btn.primary:hover { background: #6039E8; border-color: #6039E8; color: #fff; }
+.cc-setup { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 10px; }
+.cc-setup summary { font-size: 11.5px; color: var(--amber-dim); cursor: pointer; }
+.cc-sub { font-size: 11.5px; color: var(--fg-dim); margin: 12px 0 6px; }
+
+/* ── Brand ─────────────────────────────────────────────────────────────── */
+.brand { display: flex; align-items: center; flex: none; }
+.brand svg { display: block; border-radius: 5px; }
+.empty.booting { display: flex; align-items: center; gap: 10px; color: var(--fg-dim); }
+
+/* ── Toolbar: pinned actions + a scrolling tab strip ───────────────────── */
+.topbar { gap: 10px; }
+/* The status line yields space first — the tabs matter more than the detail. */
+.topbar .sub { order: 1; flex: 0 1 auto; min-width: 0; }
+.tabstrip-wrap { order: 2; position: relative; flex: 1 1 auto; min-width: 0; display: flex; align-items: center; }
+.actions-group { order: 3; display: flex; align-items: center; gap: 6px; flex: none; margin-left: 0; }
+
+.tabstrip {
+  display: flex; align-items: center; gap: 6px;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-behavior: smooth; scrollbar-width: none;
+  padding: 0 2px; width: 100%;
+}
+.tabstrip::-webkit-scrollbar { display: none; }
+.tabstrip > .btn { flex: none; }
+
+/* Chevrons appear only when there is somewhere to scroll, over a fade so the
+   clipped tab reads as continuing rather than truncated. */
+.tabnudge {
+  position: absolute; top: 0; bottom: 0; z-index: 2;
+  width: 26px; border: 0; cursor: pointer;
+  color: var(--fg); font-size: 15px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+.tabnudge.left  { left: 0;  background: linear-gradient(to right, var(--chrome) 55%, transparent); }
+.tabnudge.right { right: 0; background: linear-gradient(to left,  var(--chrome) 55%, transparent); }
+.tabnudge:hover { color: var(--amber); }
+.topbar .rolechip { margin-left: 0; flex: none; font-size: 10px; }
+.scratch-lead { padding: 12px 14px 4px; font-size: 12px; line-height: 1.7; color: var(--fg-dim); max-width: 80ch; }
+.scratch-lead b { color: var(--fg); }
+.bindchip.xform { color: var(--amber-text); border-color: #4A3A14; }
+.bindchip.xform:hover { border-color: var(--amber); color: var(--amber); }
+.scratch-warn { margin-top: 9px; padding: 8px 11px; border-left: 2px solid var(--amber); background: #221B0F; color: #E8D9B5; font-size: 11.5px; line-height: 1.65; }
+.scratch-warn b { color: var(--amber-dim); }
+.linkish { background: none; border: 0; padding: 0; font: inherit; color: var(--amber); text-decoration: underline; cursor: pointer; }
+
+/* ── CSS scratchpad ────────────────────────────────────────────────────── */
+.csslink { font-size: 9.5px; letter-spacing: .4px; padding: 1px 5px; border-radius: 3px; background: #2E2E2E; border: 1px solid var(--line-strong); color: var(--fg-dim); cursor: pointer; flex: none; opacity: 0; }
+.structrow:hover .csslink, .structrow.sel .csslink { opacity: 1; }
+.csslink:hover { border-color: var(--amber); color: var(--amber); }
+
+.cssrows { border: 1px solid var(--line); border-radius: 5px; background: var(--bg-entry); padding: 4px 0; }
+.cssrow { display: flex; align-items: center; gap: 9px; padding: 3px 10px; font-family: var(--mono); font-size: 11.5px; }
+.cssrow.edited { background: #221B0F; }
+.cssrow .cprop { color: var(--tok-key); flex: none; width: 148px; overflow: hidden; text-overflow: ellipsis; }
+.cssrow .cval { flex: 1; min-width: 0; background: var(--bg); border: 1px solid var(--line-strong); border-radius: 3px; color: var(--tok-str); font: inherit; padding: 2px 6px; outline: none; }
+.cssrow .cval:focus { border-color: var(--amber); }
+.cssrow .ccomputed { flex: 1; min-width: 0; color: var(--fg-dim); overflow: hidden; text-overflow: ellipsis; }
+.cssrows.computed .cprop { color: var(--fg-faint); }
+.cssadd { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.cssadd .cval { flex: 0 0 260px; background: var(--bg); border: 1px solid var(--line-strong); border-radius: 3px; color: var(--fg); font-family: var(--mono); font-size: 11.5px; padding: 4px 7px; outline: none; }
+.rolechip.designer { background: rgba(78,37,226,.28); color: #B9A6F5; }
+
+/* ── Overflow menu ─────────────────────────────────────────────────────── */
+.overflow { position: relative; flex: none; }
+.overflow > .btn { padding: 0 9px; font-size: 15px; line-height: 1; }
+.overflow-menu {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 100; min-width: 244px;
+  background: var(--bg-head); border: 1px solid var(--line-strong); border-radius: 6px;
+  box-shadow: 0 10px 32px rgba(0,0,0,.5); padding: 5px; display: flex; flex-direction: column;
+}
+.overflow-item {
+  display: flex; align-items: baseline; gap: 8px; width: 100%; text-align: left;
+  background: none; border: 0; border-radius: 4px; padding: 6px 8px;
+  color: var(--fg); font: inherit; font-size: 12px; cursor: pointer; white-space: nowrap;
+}
+.overflow-item:hover { background: #2E2E2E; }
+.oi-check { width: 12px; flex: none; color: #86994F; font-size: 11px; }
+.oi-label { flex: 1; }
+.oi-detail { color: var(--fg-faint); font-size: 10.5px; flex: none; }
+.overflow-sep { height: 1px; background: var(--line); margin: 4px 6px; }
+
+/* ── Scratchpad completions ───────────────────────────────────────────────
+ * Anchored under the expression box. The preview column is the reason this
+ * exists, so it is given real width and never truncated to a few characters —
+ * seeing `(not found)` next to a path is the whole diagnostic.
+ */
+.completions {
+  position: absolute; z-index: 20; left: 8px; right: 8px; top: 100%;
+  max-height: 260px; overflow-y: auto;
+  background: var(--bg-raised, #232323);
+  border: 1px solid var(--line-strong); border-radius: 4px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+.completion {
+  display: flex; width: 100%; gap: 12px; align-items: baseline;
+  padding: 3px 8px; border: 0; background: none; cursor: pointer; text-align: left;
+  font-family: var(--mono); font-size: 11px; color: var(--tok-key);
+}
+.completion.on { background: #333; }
+.completion .c-label { flex: 0 0 auto; }
+.completion .c-preview { flex: 1 1 auto; color: var(--muted, #8a8a8a); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* A path that is not there must not look like one that is. */
+.completion.k-missing .c-label,
+.completion.k-missing .c-preview { color: var(--tok-err, #e06c75); }
+.completion.k-element .c-preview { font-style: italic; }
+.completion.k-local .c-label { color: var(--amber); }
+
+/* Environment chip: which tenant, and whether it can be changed. */
+.envchip {
+  font-family: var(--mono); font-size: 10px; padding: 0 5px; border-radius: 3px;
+  border: 1px solid var(--line-strong); white-space: nowrap;
+}
+.envchip.ok { color: var(--tok-key); }
+/* Production reads as a warning, not as decoration. */
+.envchip.locked { color: var(--amber); border-color: var(--amber); }
+
+/* The state summary on an element row — the join that merged the two views. */
+.structrow .estate {
+  font-family: var(--mono); font-size: 10.5px; color: var(--tok-str);
+  margin-left: auto; padding-left: 10px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 46%;
+}
+/* "no state" must not read like a value — it is the absence of one. */
+.structrow .estate.none { color: #6E6E6E; font-style: italic; }
+.treerow .value.dim { color: #6E6E6E; }
+
+/* The target button carries capture state and permission in its own colour, so
+   the toolbar needs one control rather than a button plus a dot plus a chip. */
+.btn.target.st-attached { border-color: #3E7B52; color: #9BD6AE; }
+.btn.target.st-error, .btn.target.st-failed { border-color: #A2453C; color: #E9A79F; }
+.btn.target.st-idle, .btn.target.st-waiting { border-color: var(--line-strong); color: var(--muted, #8a8a8a); }
+/* Read-only is a property of where you are, not of the capture, so it reads as a
+   dashed edge rather than another colour competing with status. */
+.btn.target.locked { border-style: dashed; }
+
+/* Expandable JSON rows in the log body and the state tree. */
+.jsonrow { font-family: var(--mono); font-size: 11px; line-height: 17px; white-space: pre-wrap;
+  word-break: break-word; }
+.jsonrow:hover { background: #262626; }
+
+/* The element and expression behind an issue. Monospace and dimmed: it is
+   evidence you read, not a control. */
+.ielement { display: flex; gap: 8px; align-items: baseline; padding: 2px 12px 4px; min-width: 0; }
+.ielement .ename { color: #C9B8FF; font: 11px/1.5 ui-monospace, Menlo, monospace; flex: none; }
+.ielement .expr {
+  color: #8d93a5; font: 11px/1.5 ui-monospace, Menlo, monospace;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+}
+
+/* ── Script and GraphQL consoles ─────────────────────────────────────────────
+   Two columns: inputs on the left, the thing you are writing plus its answer on
+   the right. Every region scrolls in its own box, because a large payload and a
+   large result must not push the editor off screen — which is what made the
+   earlier panes unusable with real data. */
+.scriptgrid { display: flex; flex: 1; min-height: 0; gap: 1px; background: #23262f; }
+.scriptio {
+  display: flex; flex-direction: column; width: 34%; min-width: 220px;
+  background: #14161c; min-height: 0; overflow: hidden;
+}
+.scriptmain {
+  display: flex; flex-direction: column; flex: 1; min-width: 0;
+  background: #14161c; min-height: 0; overflow: hidden;
+}
+/* The pane itself, so the grid has a bounded height to divide up. Without this the
+   grid sizes to its content and every inner `overflow: auto` is inert. */
+.pane.script, .pane.graphql { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.pane.script .scriptgrid, .pane.graphql .scriptgrid { min-height: 0; }
+
+.iohead {
+  display: flex; align-items: center; gap: 8px; flex: none;
+  padding: 4px 8px; background: #1a1d24; border-bottom: 1px solid #23262f;
+}
+.iohead .label { font: 600 10px/1.6 ui-sans-serif, system-ui; letter-spacing: .08em; text-transform: uppercase; color: #9aa1b2; }
+.iohead .hint { font: 10px/1.6 ui-monospace, Menlo, monospace; color: #6b7280; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iohead .seg { margin-left: auto; display: flex; gap: 2px; }
+.iohead .btn.tiny + .btn.tiny { margin-left: 0; }
+
+/* Every input scrolls in its own box.
+   `min-height: 0` is the load-bearing part: a flex child defaults to `min-height:
+   auto`, which refuses to shrink below its content — so a large payload grew the
+   textarea instead of scrolling it, and pushed the editor and the output off the
+   pane entirely. `overflow: auto` alone does nothing without it. */
+textarea.code {
+  flex: 1; min-height: 0; height: auto; resize: none; border: 0; outline: 0;
+  overflow: auto;
+  background: #14161c; color: #d7dae3; padding: 6px 8px;
+  font: 12px/1.55 ui-monospace, Menlo, monospace; tab-size: 2;
+  /* A long unbroken JSON string must not widen the pane. */
+  white-space: pre; overflow-wrap: normal;
+}
+textarea.code.editor { flex: 2.2; }
+textarea.code::placeholder { color: #4b5160; }
+
+.output { flex: 1.6; overflow: auto; padding: 6px 8px; min-height: 0; }
+/* The table view manages its own scrolling and must fill, not stretch, the output. */
+.output > .tablewrap { max-height: none; }
+.output pre { margin: 0; white-space: pre-wrap; word-break: break-word; font: 12px/1.55 ui-monospace, Menlo, monospace; color: #d7dae3; }
+.output pre.err { color: #ff8b83; }
+.output .logs { margin-bottom: 6px; border-left: 2px solid #3a3f4d; padding-left: 8px; }
+.output .logline { font: 11px/1.6 ui-monospace, Menlo, monospace; color: #9aa1b2; }
+.output .logline.err { color: #ff8b83; }
+
+.btn.tiny { padding: 1px 6px; font-size: 10px; }
+.btn.primary { background: #4E25E2; border-color: #5c34ee; color: #fff; }
+.btn.primary:disabled { opacity: .45; }
+.seg { display: flex; gap: 2px; }
+
+/* ── The spreadsheet view ────────────────────────────────────────────────────
+   Sticky header, because scrolling twenty rows and losing the column names is
+   the one thing a table must not do. */
+.tablewrap { overflow: auto; max-height: 100%; }
+table.grid { border-collapse: collapse; font: 11px/1.5 ui-monospace, Menlo, monospace; }
+table.grid th, table.grid td {
+  border: 1px solid #23262f; padding: 2px 6px; text-align: left;
+  max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+table.grid th { position: sticky; top: 0; background: #1a1d24; color: #C9B8FF; z-index: 1; }
+table.grid td { color: #d7dae3; }
+table.grid .rownum { background: #1a1d24; color: #6b7280; text-align: right; position: sticky; left: 0; }
+/* An absent key and an explicit null are different answers, and telling them
+   apart is usually the point of looking. */
+table.grid td.absent { color: #4b5160; }
+table.grid td.nul { color: #7c8496; font-style: italic; }
+
+.modelcard { border-bottom: 1px solid #1e2129; }
+
+/* Name plus its copy button, side by side. The button used to live inside the
+   fixed-width `.ename` and wrapped onto the next line. */
+.namecell { display: flex; align-items: baseline; gap: 2px; min-width: 130px; flex: none; }
+.namecell .ename { min-width: 0; }
+.namecell:hover .copybits { display: flex; }
+
+/* ── Completions ─────────────────────────────────────────────────────────────
+   Anchored to the editor rather than the caret: a textarea gives no caret
+   coordinates without measuring the text, and a fixed corner is predictable —
+   you look in one place every time instead of hunting for the popup. */
+.editorwrap { position: relative; display: flex; flex: 2.2; min-height: 0; }
+.editorwrap > textarea { flex: 1; min-height: 0; overflow: auto; }
+.completions {
+  position: absolute; right: 8px; bottom: 8px; z-index: 5;
+  min-width: 260px; max-width: 70%; max-height: 240px; overflow: auto;
+  background: #1a1d24; border: 1px solid #3a3f4d; border-radius: 4px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.55);
+}
+.citem {
+  display: flex; gap: 10px; align-items: baseline; justify-content: space-between;
+  padding: 3px 8px; cursor: pointer;
+  font: 11px/1.6 ui-monospace, Menlo, monospace;
+}
+.citem.on { background: #4E25E2; }
+.citem .clabel { color: #d7dae3; }
+.citem .cpreview { color: #7c8496; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.citem.on .cpreview { color: #E4DDFF; }
+/* A path that does not exist is the diagnosis, not a failure — dimmed, still listed. */
+.citem.k-missing .clabel { color: #8d93a5; font-style: italic; }
+.citem.k-element .clabel { color: #C9B8FF; }
+.citem.k-local .clabel { color: #7fd1a0; }
+
+/* ── Screen tab: tree beside a persistent detail pane ────────────────────────
+   Properties, CSS, transforms and state used to expand *inside* the tree, so one
+   expansion pushed every other element off screen and two could never be compared.
+   Each side scrolls independently; `min-height: 0` is what lets them, since a flex
+   child otherwise refuses to shrink below its content. */
+.elementsplit { display: flex; flex: 1; min-height: 0; }
+.elementtree { flex: 1; min-width: 0; min-height: 0; overflow: auto; }
+.elementdetail {
+  display: flex; flex-direction: column; min-width: 0; min-height: 0;
+  border-left: 1px solid #23262f; background: #14161c;
+}
+.elementdetail .scroll { flex: 1; min-height: 0; overflow: auto; }
+.elementdetail .panehead .btn.tiny { margin-left: auto; }
+
+.splitgrip { flex: none; width: 5px; cursor: col-resize; background: #23262f; }
+.splitgrip:hover { background: #4E25E2; }
+
+/* The selected row, distinct from the designer's own selection (`.sel`) — they are
+   different facts and were being conflated by using one style for both. */
+.structrow.picked { background: #232046; }
+.structrow.picked .ename { color: #E4DDFF; }
+
+/* ── Clickable payload / context trees ───────────────────────────────────────
+   The path is the point: clicking a row drops `$state.orderId` into the script at
+   the caret, so nobody has to read JSON and retype a path — where one typo yields a
+   silent null rather than an error. */
+.pathtree { flex: 1; min-height: 0; overflow: auto; padding: 4px 0; }
+.pathrow {
+  display: flex; gap: 6px; align-items: baseline;
+  font: 11px/1.7 ui-monospace, Menlo, monospace; white-space: nowrap;
+}
+.pathrow:hover { background: #1e2231; }
+.pathrow .caret { width: 12px; flex: none; cursor: pointer; color: #6b7280; text-align: center; }
+/* Both the key and its value insert, so the click target is the whole row rather
+   than a few characters of text. */
+.pathrow .pathkey { color: #C9B8FF; cursor: pointer; flex: none; }
+.pathrow .pathval {
+  color: #7c8496; cursor: pointer; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+}
+.pathrow:hover .pathkey { color: #E4DDFF; text-decoration: underline; }
+
+/* ── Property panel: dense by default ────────────────────────────────────────
+   The platform's own panel for one SelectInput runs to ~7,600px. These rows are
+   deliberately tight — a diagnostic panel is scanned, not filled in. */
+.propchips { display: flex; gap: 4px; align-items: center; padding: 3px 8px 3px 0; flex-wrap: wrap; }
+.chip {
+  all: unset; cursor: pointer; padding: 1px 7px; border-radius: 9px;
+  font: 10px/1.7 ui-sans-serif, system-ui; color: #9aa1b2;
+  background: #1e2231; border: 1px solid #2c3142;
+}
+.chip.on { background: #4E25E2; border-color: #5c34ee; color: #fff; }
+.chip.flat { cursor: default; }
+.chip.alert { color: #ffb4ae; border-color: #5a2b2b; }
+.chip.alert.on { background: #8f2f2f; border-color: #b03a3a; color: #fff; }
+
+/* Problems above properties, and only when there are some — an empty heading is noise. */
+.propproblems { padding: 2px 0 4px; }
+.propproblem { display: flex; gap: 8px; padding: 1px 8px 1px 22px; font: 11px/1.6 ui-monospace, Menlo, monospace; }
+.propproblem.high .ename { color: #ff8b83; }
+.propproblem.medium .ename { color: #ffcf70; }
+
+/* Provenance — the one column the authoring panel cannot show. */
+.eprops.prov-transform { color: #C9B8FF; }
+.eprops.prov-authored { color: #7fd1a0; }
+.eprops.prov-runtime { color: #8fc7ff; }
+.eprops.prov-default, .eprops.prov-unset { color: #6b7280; }
+.eprops.prov-unknown { color: #ffcf70; }
+
+pre.propvalue {
+  margin: 2px 0; padding: 4px 6px; background: #10121a; border-radius: 3px;
+  max-height: 220px; overflow: auto; white-space: pre-wrap; word-break: break-word;
+  font: 11px/1.5 ui-monospace, Menlo, monospace; color: #d7dae3;
+}
+
+/* The node's colour from the canvas, so the list scans like the diagram. */
+.nodedot {
+  width: 8px; height: 8px; border-radius: 2px; flex: none; margin-right: 2px;
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+/* A search over the payload / context, above each tree. */
+input.filter.pathfind { flex: none; margin: 3px 6px; }
+/* A value match is dimmer than a key match: the key is what you usually meant. */
+.pathrow .pathkey.onvalue { color: #8fc7ff; }
+
+/* ── Function palette ────────────────────────────────────────────────────────
+   Filtered by the type of whatever the cursor is on, so it reads as a keyboard
+   rather than a reference. Dense chips: 64 function names must fit without
+   becoming a second scroll region. */
+.palette { flex: none; max-height: 132px; overflow: auto; padding: 3px 6px 5px; border-top: 1px solid #23262f; }
+.palrow { display: flex; gap: 3px; align-items: center; margin-bottom: 3px; }
+.palrow.wrap { flex-wrap: wrap; }
+.palfn, .palop {
+  all: unset; cursor: pointer; padding: 1px 6px; border-radius: 3px;
+  font: 11px/1.6 ui-monospace, Menlo, monospace;
+  background: #1e2231; border: 1px solid #2c3142; color: #C9B8FF;
+}
+.palfn:hover, .palop:hover { background: #4E25E2; border-color: #5c34ee; color: #fff; }
+/* Operators read as symbols, so they get their own weight rather than blending in. */
+.palop { color: #8fc7ff; min-width: 20px; text-align: center; font-weight: 600; }
+/* A glance at the section a function belongs to, without a heading per group. */
+.palfn.sec-numeric { color: #9fe0b4; }
+.palfn.sec-string { color: #ffd39b; }
+.palfn.sec-array, .palfn.sec-aggregation { color: #9fd0ff; }
+.palfn.sec-object { color: #e0b4ff; }
+.palfn.sec-datetime { color: #ffb4d9; }
+.palpreview { padding-top: 2px; }
+.palpreview code { color: #d7dae3; }
+
+/* ── Bulk style by element type ──────────────────────────────────────────────
+   Two columns of fields so a group's dozen properties fit without scrolling —
+   the whole point is doing one edit instead of seven. */
+.detailtabs { display: flex; gap: 3px; padding: 3px 8px; border-bottom: 1px solid #23262f; flex: none; }
+.bulkstyle { padding-bottom: 8px; }
+.bulkgroup { border-bottom: 1px solid #1e2129; }
+.bulkmembers { display: flex; flex-wrap: wrap; gap: 4px; padding: 3px 10px 4px 22px; }
+.bulkmember { color: #9aa1b2; cursor: default; }
+.bulkmember:hover { color: #E4DDFF; }
+.bulkfields {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 2px 8px; padding: 2px 10px 4px 22px;
+}
+.bulkfield { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.bulklabel {
+  flex: none; width: 74px; color: #9aa1b2;
+  font: 10px/1.7 ui-sans-serif, system-ui;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bulkfield input.code, .bulkfield select.code { flex: 1; min-width: 0; }
+.bulkcolour { display: flex; gap: 3px; flex: 1; min-width: 0; align-items: center; }
+.bulkcolour input[type="color"] { width: 20px; height: 18px; padding: 0; border: 0; background: none; flex: none; }
+.bulkactions { display: flex; gap: 6px; align-items: center; padding: 2px 10px 6px 22px; }
+
+/* A value that probably does not suit the armed function. Dimmed, not disabled —
+   JSONata coerces, so a hint is right and a lock would be wrong. */
+.pathrow.unfit .pathkey, .pathrow.unfit .pathval { opacity: .32; }
+.pathrow.unfit:hover .pathkey, .pathrow.unfit:hover .pathval { opacity: .75; }
+.palfn.armed { background: #F59E0B; border-color: #f6ad2b; color: #1a1d24; font-weight: 600; }
+
+/* A Fuuz platform function: available to write, not evaluable in this panel. The dotted
+   underline is the standard "there is more to know here" cue, and the tooltip says what. */
+.palfn.platform { border-style: dashed; }

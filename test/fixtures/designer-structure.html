@@ -1,0 +1,128 @@
+<!--
+  The App Designer's "Screen Structure" panel, captured live from
+  admin.fuuz.app on 2026-08-16 while a screen was open.
+
+  Verbatim apart from `d="…"` path data, which is shortened — the parser reads
+  role/data-node-id/title/class only, and the full paths are several KB of noise.
+
+  What this fixture is here to pin:
+    · `data-node-id` carries the craft id ("ROOT", "IntakePage00")
+    · the child <ul role="group"> is buried under two MuiCollapse wrappers plus a
+      bare <div>, so children are NOT direct descendants of the group
+    · a collapsed row (IntakePage00) renders no children despite claiming 10
+    · "Nothing matches the selected filters." is a sibling of the tree items
+-->
+<div class="MuiPaper-root jss489 jss490 MuiPaper-elevation1">
+  <div class="MuiPaper-root jss502 jss862 MuiPaper-elevation1">
+    <div class="jss503">
+      <h6 class="MuiTypography-root MuiTypography-subtitle1">Screen Structure</h6>
+      <p class="MuiTypography-root jss504 MuiTypography-body2">An overview of your screen's structure with quick filters.</p>
+    </div>
+    <svg data-prefix="fad" data-icon="folder-tree" class="svg-inline--fa fa-folder-tree jss503"><path d="M0 0"></path></svg>
+  </div>
+
+  <div class="jss855">
+    <div class="jss858">
+      <div class="MuiFormControl-root MuiTextField-root jss859 jss159">
+        <div class="MuiInputBase-root MuiInput-root">
+          <input placeholder="Search elements or scripts..." type="text" class="MuiInputBase-input" value="">
+        </div>
+      </div>
+    </div>
+
+    <div class="MuiPaper-root jss860 MuiPaper-elevation1">
+      <button class="MuiButtonBase-root" tabindex="0" type="button">
+        <div class="jss856">
+          <div class="jss857">
+            <svg data-prefix="fas" data-icon="filter" class="svg-inline--fa fa-filter"><path d="M0 0"></path></svg>
+            <p class="MuiTypography-root MuiTypography-body2">Filters</p>
+          </div>
+          <svg data-prefix="fad" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down"><path d="M0 0"></path></svg>
+        </div>
+      </button>
+      <div class="MuiCollapse-container MuiCollapse-hidden" style="min-height: 0px;">
+        <div class="MuiCollapse-wrapper"><div class="MuiCollapse-wrapperInner"><div class="jss861"><form class="">
+          <div class="jss390"><p class="MuiTypography-root MuiTypography-body2">Quick Filters:</p></div>
+          <div class="jss391">
+            <button class="MuiButtonBase-root MuiToggleButton-root jss393" type="button" aria-pressed="false" title="Scripts present">
+              <span class="MuiToggleButton-label"><svg data-icon="code-simple"><path d="M0 0"></path></svg><p class="MuiTypography-root jss394 MuiTypography-body2">With Scripts</p></span>
+            </button>
+            <button class="MuiButtonBase-root MuiToggleButton-root jss393" type="button" aria-pressed="false" title="Hidden/Visible prop in use">
+              <span class="MuiToggleButton-label"><svg data-icon="eye-slash"><path d="M0 0"></path></svg><p class="MuiTypography-root jss394 MuiTypography-body2">Hidden</p></span>
+            </button>
+            <button class="MuiButtonBase-root MuiToggleButton-root jss393" type="button" aria-pressed="false" title="Disabled prop in use">
+              <span class="MuiToggleButton-label"><svg data-icon="ban"><path d="M0 0"></path></svg><p class="MuiTypography-root jss394 MuiTypography-body2">Disabled</p></span>
+            </button>
+          </div>
+          <div class="jss390"><p class="MuiTypography-root MuiTypography-body2">Element Categories:</p></div>
+          <div class="jss391">
+            <button class="MuiToggleButton-root jss393 Mui-selected jss395" type="button" aria-pressed="true"><span class="MuiToggleButton-label"><svg data-icon="vector-square"><path d="M0 0"></path></svg><p class="jss394">Layout</p></span></button>
+            <button class="MuiToggleButton-root jss393 Mui-selected jss395" type="button" aria-pressed="true"><span class="MuiToggleButton-label"><svg data-icon="file-lines"><path d="M0 0"></path></svg><p class="jss394">Data</p></span></button>
+            <button class="MuiToggleButton-root jss393 Mui-selected jss395" type="button" aria-pressed="true"><span class="MuiToggleButton-label"><svg data-icon="keyboard"><path d="M0 0"></path></svg><p class="jss394">Input</p></span></button>
+            <button class="MuiToggleButton-root jss393 Mui-selected jss395" type="button" aria-pressed="true"><span class="MuiToggleButton-label"><svg data-icon="chart-pie"><path d="M0 0"></path></svg><p class="jss394">Display</p></span></button>
+            <button class="MuiToggleButton-root jss393 Mui-selected jss395" type="button" aria-pressed="true"><span class="MuiToggleButton-label"><svg data-icon="arrow-pointer"><path d="M0 0"></path></svg><p class="jss394">Buttons</p></span></button>
+          </div>
+          <div class="jss390"><p class="MuiTypography-root MuiTypography-body2">Group By:</p></div>
+          <div class="jss391">
+            <button class="MuiToggleButton-root jss393 Mui-selected jss395" type="button" aria-pressed="true" title=""><span class="MuiToggleButton-label"><svg data-icon="list-tree"><path d="M0 0"></path></svg><p class="jss394">Tree View</p></span></button>
+            <button class="MuiToggleButton-root jss393" type="button" aria-pressed="false" title=""><span class="MuiToggleButton-label"><svg data-icon="layer-group"><path d="M0 0"></path></svg><p class="jss394">Element Type</p></span></button>
+          </div>
+        </form></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="MuiDivider-root">
+
+  <div class="jss883">
+    <ul role="tree" aria-multiselectable="false" class="MuiTreeView-root jss884">
+      <div>
+        <li class="MuiTreeItem-root jss425 Mui-expanded Mui-selected" role="treeitem" aria-expanded="true" aria-selected="true" tabindex="-1" data-node-id="ROOT">
+          <div class="MuiTreeItem-content">
+            <div class="MuiTreeItem-iconContainer jss431">
+              <svg data-prefix="fad" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down"><path d="M0 0"></path></svg>
+            </div>
+            <div class="MuiTypography-root MuiTreeItem-label jss426 MuiTypography-body1">
+              <div class="jss427" title="Screen">
+                <svg data-prefix="fas" data-icon="vector-square" class="svg-inline--fa fa-vector-square" style="color: rgb(35, 81, 117);"><path d="M0 0"></path></svg>
+                <div class="MuiTypography-root jss429 MuiTypography-body2">Screen</div>
+              </div>
+              <div class="jss428">
+                <button class="MuiButtonBase-root MuiIconButton-root hoverAction" type="button" title="Quick actions">
+                  <span class="MuiIconButton-label"><svg data-icon="ellipsis-vertical"><path d="M0 0"></path></svg></span>
+                </button>
+                <div><div class="jss886"></div></div>
+                <p class="MuiTypography-root MuiTypography-body2 MuiTypography-colorTextSecondary" title="10 app components">10</p>
+              </div>
+            </div>
+          </div>
+          <ul class="MuiCollapse-container MuiTreeItem-group jss430 MuiCollapse-entered" role="group" style="min-height: 0px;">
+            <div class="MuiCollapse-wrapper"><div class="MuiCollapse-wrapperInner"><div>
+              <li class="MuiTreeItem-root jss425" role="treeitem" aria-expanded="false" tabindex="-1" data-node-id="IntakePage00">
+                <div class="MuiTreeItem-content">
+                  <div class="MuiTreeItem-iconContainer jss431">
+                    <svg data-prefix="fad" data-icon="chevron-right" class="svg-inline--fa fa-chevron-right"><path d="M0 0"></path></svg>
+                  </div>
+                  <div class="MuiTypography-root MuiTreeItem-label jss426 MuiTypography-body1">
+                    <div class="jss427" title="IntakePage">
+                      <svg data-prefix="fas" data-icon="vector-square" class="svg-inline--fa fa-vector-square" style="color: rgb(35, 81, 117);"><path d="M0 0"></path></svg>
+                      <div class="MuiTypography-root jss429 MuiTypography-body2">IntakePage</div>
+                    </div>
+                    <div class="jss428">
+                      <button class="MuiButtonBase-root MuiIconButton-root hoverAction" type="button" title="Quick actions">
+                        <span class="MuiIconButton-label"><svg data-icon="ellipsis-vertical"><path d="M0 0"></path></svg></span>
+                      </button>
+                      <div><div class="jss886"></div></div>
+                      <p class="MuiTypography-root MuiTypography-body2 MuiTypography-colorTextSecondary" title="10 app components">10</p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </div></div></div>
+          </ul>
+        </li>
+      </div>
+      <p class="MuiTypography-root jss885 MuiTypography-body2">Nothing matches the selected filters.</p>
+    </ul>
+  </div>
+</div>

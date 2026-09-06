@@ -1,0 +1,33 @@
+{
+  "name": "fuuz-dev-console",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Read a Fuuz screen's console as an execution log and the state it produced \u2014 as a Chrome DevTools panel, or from the CLI.",
+  "scripts": {
+    "check": "tsc --noEmit -p tsconfig.json && node scripts/extract-elements.mjs --check && node scripts/extract-functions.mjs --check",
+    "build": "npm run check && node scripts/build.mjs",
+    "build:watch": "node scripts/build.mjs --watch",
+    "compile:node": "tsc -p tsconfig.node.json",
+    "test": "npm run compile:node && node --test out/test/*.test.js",
+    "test:panel": "npm run build && node test/panel.smoke.mjs && node test/hook.smoke.mjs && node test/nativeConsole.smoke.mjs && node test/locator.smoke.mjs && node test/domStructure.smoke.mjs && node test/fiber.smoke.mjs && node test/routing.smoke.mjs && node test/runtimeScrape.smoke.mjs && node test/reachability.smoke.mjs && node test/webmcp.smoke.mjs && node test/storeTap.smoke.mjs",
+    "dev-console": "npm run compile:node && node src/cli/dev-console.cjs",
+    "mcp": "npm run compile:node && node src/mcp/server.cjs",
+    "test:mcp": "npm run compile:node && node test/mcp.smoke.mjs && node test/bridge.smoke.mjs && node test/screenshot.smoke.mjs",
+    "registry": "node scripts/extract-elements.mjs",
+    "test:e2e": "npm run compile:node && node test/endToEnd.smoke.mjs"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "esbuild": "^0.21.5",
+    "jsdom": "^29.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "jsonata": "^2.1.1"
+  }
+}

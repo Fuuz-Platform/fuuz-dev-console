@@ -1,0 +1,840 @@
+[
+  {
+    "level": "debug",
+    "args": [
+      "Transform Debugging: ",
+      {
+        "expression": "$not($exists($components.AssetIntakeForm.data.assetCollection.id)) or $not($exists($components.AssetIntakeForm.data.title))",
+        "context": {
+          "metadata": {
+            "urlParameters": {
+              "screenVersionId": "cmsvvlf7u0jal016k5ztgfqs4"
+            },
+            "querystring": {
+              "Asset Intake": {
+                "TicketTable": {
+                  "view": "Default"
+                }
+              }
+            },
+            "user": {
+              "id": "clblbguru000901stclxdf3d3",
+              "firstName": "Craig",
+              "lastName": "Scott",
+              "middleName": "",
+              "email": "cscott@fuuz.com",
+              "environments": null,
+              "accessTypeId": "administrator"
+            },
+            "tenant": {
+              "id": "exampleTenantBuild",
+              "name": "Fuuz Administration Build",
+              "tenantTypeId": "custom"
+            },
+            "userTenants": [
+              {
+                "id": "clblbguyp000a01sa85j0065x",
+                "accessTypeId": "administrator",
+                "tenant": {
+                  "id": "fuuz-administration",
+                  "name": "Fuuz Administration",
+                  "tenantTypeId": "custom"
+                }
+              },
+              {
+                "id": "clt7ojjxd000c01wadu020oun",
+                "accessTypeId": "administrator",
+                "tenant": {
+                  "id": "fuuzAdministrationAdmin",
+                  "name": "Fuuz Administration Admin",
+                  "tenantTypeId": "administration"
+                }
+              },
+              {
+                "id": "cmqgi23ya241k01qme8y05grq",
+                "accessTypeId": "administrator",
+                "tenant": {
+                  "id": "fuuzCrmBuild",
+                  "name": "Fuuz CRM Build",
+                  "tenantTypeId": "custom"
+                }
+              },
+              {
+                "id": "cmqgi27671lhv01rc61qhdt8i",
+                "accessTypeId": "administrator",
+                "tenant": {
+                  "id": "fuuzCrm",
+                  "name": "Fuuz CRM",
+                  "tenantTypeId": "custom"
+                }
+              },
+              {
+                "id": "cmqgi2dcp1li701rc2qhx77i1",
+                "accessTypeId": "administrator",
+                "tenant": {
+                  "id": "exampleTenantBuild",
+                  "name": "Fuuz Administration Build",
+                  "tenantTypeId": "custom"
+                }
+              }
+            ],
+            "screen": {
+              "id": "assetIntakeForm",
+              "forceFullscreen": false,
+              "version": {
+                "id": "cmsvvlf7u0jal016k5ztgfqs4",
+                "number": "0.0.15",
+                "createdAt": "2026-08-16T14:03:54.570Z"
+              },
+              "latestVersion": {
+                "id": "cmsvvlf7u0jal016k5ztgfqs4",
+                "label": "0.0.15"
+              }
+            },
+            "environment": "production",
+            "platformVersion": "2026.5.0",
+            "settings": {
+              "AlwaysDisplayTimeZones": false,
+              "DateFormat": "L",
+              "DateTimeFormat": "L LT",
+              "FloatFormat": "0,0.[00000000]",
+              "IntegerFormat": "0,0",
+              "Locale": null,
+              "LogoImageSourceURL": "",
+              "PrimaryColor": "#ffa000",
+              "SecondaryColor": "#afafaf",
+              "ThemeMode": "System",
+              "TimeFormat": "LT",
+              "TimeZone": null
+            },
+            "enterprise": {
+              "id": "fuuz-administration",
+              "name": "Fuuz Administration",
+              "maintenanceMode": null,
+              "platformVersion": "2026.5.0",
+              "releaseDate": "2026-05-19T16:59:23.736Z",
+              "environment": "production",
+              "domain": "admin.fuuz.app"
+            },
+            "userRoles": [
+              {
+                "id": "cmsuq51p50h9l016k0htc488b",
+                "role": {
+                  "id": "salesPerson",
+                  "name": "Sales Person",
+                  "description": "",
+                  "menu": {
+                    "items": "[…]"
+                  },
+                  "homeScreenId": null,
+                  "homeScreen": null
+                }
+              }
+            ],
+            "lastAuthenticationEvent": {
+              "id": "cmsucf7v201c401521cl7deon",
+              "createdAt": "2026-08-15T12:19:26.222Z",
+              "ipAddress": "107.5.230.88"
+            }
+          },
+          "components": {
+            "IntakeTarget": {
+              "fn": {
+                "loadOptions": "ƒ Te"
+              }
+            },
+            "IntakeFieldStack": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "AssetIntakeForm": {
+              "data": {
+                "title": "Screen Runner capture"
+              },
+              "initialData": null,
+              "defaultValues": {},
+              "fn": {
+                "getDeleteMutation": "ƒ anon",
+                "getUpdateMutation": "ƒ anon",
+                "loadData": "ƒ anon",
+                "getDeletePayload": "ƒ anon",
+                "getUpdatePayload": "ƒ anon",
+                "getUpdatePayloadCard": "ƒ anon",
+                "getVariables": "ƒ anon",
+                "setValue": "ƒ setValue",
+                "focus": "ƒ focus",
+                "blur": "ƒ blur",
+                "disableField": "ƒ disableField",
+                "enableField": "ƒ enableField",
+                "validate": "ƒ anon",
+                "save": "ƒ anon",
+                "delete": "ƒ anon"
+              },
+              "query": {
+                "api": "Application",
+                "model": "AssetCollection"
+              },
+              "formState": {
+                "dirty": true,
+                "dirtyFields": {
+                  "title": true
+                },
+                "dirtyFieldsSinceLastSubmit": {
+                  "title": true
+                },
+                "dirtySinceLastSubmit": false,
+                "errors": {
+                  "assetCollection": "Library / Collection must be provided",
+                  "title": "Title must be provided"
+                },
+                "hasSubmitErrors": false,
+                "hasValidationErrors": true,
+                "initialValues": {},
+                "invalid": true,
+                "modified": {
+                  "assetCollection": false,
+                  "title": true,
+                  "sourceUrl": false
+                },
+                "modifiedSinceLastSubmit": false,
+                "pristine": false,
+                "submitting": false,
+                "submitFailed": false,
+                "submitSucceeded": false,
+                "touched": {
+                  "assetCollection": false,
+                  "title": false,
+                  "sourceUrl": false
+                },
+                "valid": false,
+                "values": {
+                  "title": "Screen Runner capture"
+                },
+                "visited": {
+                  "assetCollection": false,
+                  "title": true,
+                  "sourceUrl": false
+                }
+              }
+            },
+            "IntakeFormSlot": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "IntakeButtonSlot": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "IntakeActionBar": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "UploaderSlot": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "TicketTable": {
+              "data": [],
+              "initialData": [],
+              "defaultValues": {},
+              "fn": {
+                "getDeleteMutation": "ƒ anon",
+                "getUpdateMutation": "ƒ anon",
+                "loadData": "ƒ anon",
+                "getDeletePayload": "ƒ anon",
+                "getUpdatePayload": "ƒ anon",
+                "getUpdatePayloadCard": "ƒ anon",
+                "getVariables": "ƒ anon",
+                "search": "ƒ anon",
+                "selectRow": "ƒ anon",
+                "deselectRow": "ƒ anon",
+                "toggleRowSelection": "ƒ anon",
+                "selectAllRows": "ƒ anon",
+                "deselectAllRows": "ƒ anon",
+                "selectAllFiltered": "ƒ anon",
+                "deselectAllFiltered": "ƒ anon",
+                "setSelectedRows": "ƒ anon",
+                "setRows": "ƒ anon",
+                "setData": "ƒ anon",
+                "addRows": "ƒ anon",
+                "updateRows": "ƒ anon",
+                "upsertRows": "ƒ anon",
+                "deleteRows": "ƒ anon"
+              },
+              "currentView": {
+                "name": "Default",
+                "rowLimit": 500,
+                "isDefault": true,
+                "columns": [
+                  {
+                    "colId": "TicketColTitle",
+                    "hide": false,
+                    "rowGroup": false
+                  },
+                  {
+                    "colId": "TicketColGuid",
+                    "hide": false,
+                    "rowGroup": false
+                  },
+                  {
+                    "colId": "TicketColState",
+                    "hide": false,
+                    "rowGroup": false
+                  },
+                  {
+                    "colId": "TicketColLib",
+                    "hide": false,
+                    "rowGroup": false
+                  }
+                ],
+                "origin": "system"
+              },
+              "selectedRows": []
+            },
+            "TicketTableSlot": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "IntakePage": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "Screen": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "showLoading": "ƒ oe",
+                "hideLoading": "ƒ le",
+                "setContextValue": "ƒ setContextValue",
+                "deleteContextValue": "ƒ deleteContextValue",
+                "setContext": "ƒ setContext",
+                "mergeContext": "ƒ mergeContext",
+                "executePageLoadAction": "ƒ anon",
+                "return": "ƒ t"
+              },
+              "context": {}
+            },
+            "IntakePrepare": {
+              "fn": {
+                "execute": "ƒ bound executeAction"
+              }
+            }
+          },
+          "showScreenDialog": "ƒ bound showCanvasDialog"
+        },
+        "payload": {},
+        "trace": {
+          "runtime": 1,
+          "property": "disabled",
+          "actionName": "IntakePrepare",
+          "origin": "Action",
+          "dynamicPropPathComputeTime": 0,
+          "dynamicPropPaths": [
+            [
+              "disabled"
+            ]
+          ],
+          "dynamicProps": {
+            "disabled": {
+              "path": [
+                "disabled"
+              ],
+              "info": {
+                "__transform": "$not($exists($components.AssetIntakeForm.data.assetCollection.id)) or $not($exists($components.AssetIntakeForm.data.title))",
+                "__dynamicFields": "[elided]",
+                "__cacheKey": "intakeDisabled",
+                "__remote": false
+              }
+            }
+          }
+        },
+        "remote": false,
+        "language": "JSONata",
+        "result": true
+      }
+    ]
+  },
+  {
+    "level": "debug",
+    "args": [
+      "Transform Debugging: ",
+      {
+        "expression": "(\n  $me := $metadata.user.id;\n  $now := $floor($millis() / 1000);\n  $rows := $components.TicketTable.data;\n  $mine := $rows[requestedByUserId = $me and state = \"issued\" and expire > $now];\n  $t := ($m…[truncated]",
+        "context": {
+          "metadata": {
+            "urlParameters": {
+              "screenVersionId": "cmsvvlf7u0jal016k5ztgfqs4"
+            },
+            "querystring": {
+              "Asset Intake": {
+                "TicketTable": {
+                  "view": "Default"
+                }
+              }
+            },
+            "user": {
+              "id": "clblbguru000901stclxdf3d3",
+              "firstName": "Craig",
+              "lastName": "Scott",
+              "middleName": "",
+              "email": "cscott@fuuz.com",
+              "environments": null,
+              "accessTypeId": "administrator"
+            },
+            "tenant": {
+              "id": "exampleTenantBuild",
+              "name": "Fuuz Administration Build",
+              "tenantTypeId": "custom"
+            },
+            "userTenants": [
+              {
+                "id": "clblbguyp000a01sa85j0065x",
+                "accessTypeId": "administrator",
+                "tenant": {
+                  "id": "fuuz-administration",
+                  "name": "Fuuz Administration",
+                  "tenantTypeId": "custom"
+                }
+              },
+              {
+                "id": "clt7ojjxd000c01wadu020oun",
+                "accessTypeId": "administrator",
+                "tenant": {
+                  "id": "fuuzAdministrationAdmin",
+                  "name": "Fuuz Administration Admin",
+                  "tenantTypeId": "administration"
+                }
+              },
+              {
+                "id": "cmqgi23ya241k01qme8y05grq",
+                "accessTypeId": "administrator",
+                "tenant": {
+                  "id": "fuuzCrmBuild",
+                  "name": "Fuuz CRM Build",
+                  "tenantTypeId": "custom"
+                }
+              },
+              {
+                "id": "cmqgi27671lhv01rc61qhdt8i",
+                "accessTypeId": "administrator",
+                "tenant": {
+                  "id": "fuuzCrm",
+                  "name": "Fuuz CRM",
+                  "tenantTypeId": "custom"
+                }
+              },
+              {
+                "id": "cmqgi2dcp1li701rc2qhx77i1",
+                "accessTypeId": "administrator",
+                "tenant": {
+                  "id": "exampleTenantBuild",
+                  "name": "Fuuz Administration Build",
+                  "tenantTypeId": "custom"
+                }
+              }
+            ],
+            "screen": {
+              "id": "assetIntakeForm",
+              "forceFullscreen": false,
+              "version": {
+                "id": "cmsvvlf7u0jal016k5ztgfqs4",
+                "number": "0.0.15",
+                "createdAt": "2026-08-16T14:03:54.570Z"
+              },
+              "latestVersion": {
+                "id": "cmsvvlf7u0jal016k5ztgfqs4",
+                "label": "0.0.15"
+              }
+            },
+            "environment": "production",
+            "platformVersion": "2026.5.0",
+            "settings": {
+              "AlwaysDisplayTimeZones": false,
+              "DateFormat": "L",
+              "DateTimeFormat": "L LT",
+              "FloatFormat": "0,0.[00000000]",
+              "IntegerFormat": "0,0",
+              "Locale": null,
+              "LogoImageSourceURL": "",
+              "PrimaryColor": "#ffa000",
+              "SecondaryColor": "#afafaf",
+              "ThemeMode": "System",
+              "TimeFormat": "LT",
+              "TimeZone": null
+            },
+            "enterprise": {
+              "id": "fuuz-administration",
+              "name": "Fuuz Administration",
+              "maintenanceMode": null,
+              "platformVersion": "2026.5.0",
+              "releaseDate": "2026-05-19T16:59:23.736Z",
+              "environment": "production",
+              "domain": "admin.fuuz.app"
+            },
+            "userRoles": [
+              {
+                "id": "cmsuq51p50h9l016k0htc488b",
+                "role": {
+                  "id": "salesPerson",
+                  "name": "Sales Person",
+                  "description": "",
+                  "menu": {
+                    "items": "[…]"
+                  },
+                  "homeScreenId": null,
+                  "homeScreen": null
+                }
+              }
+            ],
+            "lastAuthenticationEvent": {
+              "id": "cmsucf7v201c401521cl7deon",
+              "createdAt": "2026-08-15T12:19:26.222Z",
+              "ipAddress": "107.5.230.88"
+            }
+          },
+          "components": {
+            "IntakeTarget": {
+              "fn": {
+                "loadOptions": "ƒ Te"
+              }
+            },
+            "IntakeFieldStack": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "AssetIntakeForm": {
+              "data": {
+                "title": "Screen Runner capture"
+              },
+              "initialData": null,
+              "defaultValues": {},
+              "fn": {
+                "getDeleteMutation": "ƒ anon",
+                "getUpdateMutation": "ƒ anon",
+                "loadData": "ƒ anon",
+                "getDeletePayload": "ƒ anon",
+                "getUpdatePayload": "ƒ anon",
+                "getUpdatePayloadCard": "ƒ anon",
+                "getVariables": "ƒ anon",
+                "setValue": "ƒ setValue",
+                "focus": "ƒ focus",
+                "blur": "ƒ blur",
+                "disableField": "ƒ disableField",
+                "enableField": "ƒ enableField",
+                "validate": "ƒ anon",
+                "save": "ƒ anon",
+                "delete": "ƒ anon"
+              },
+              "query": {
+                "api": "Application",
+                "model": "AssetCollection"
+              },
+              "formState": {
+                "dirty": true,
+                "dirtyFields": {
+                  "title": true
+                },
+                "dirtyFieldsSinceLastSubmit": {
+                  "title": true
+                },
+                "dirtySinceLastSubmit": false,
+                "errors": {
+                  "assetCollection": "Library / Collection must be provided",
+                  "title": "Title must be provided"
+                },
+                "hasSubmitErrors": false,
+                "hasValidationErrors": true,
+                "initialValues": {},
+                "invalid": true,
+                "modified": {
+                  "assetCollection": false,
+                  "title": true,
+                  "sourceUrl": false
+                },
+                "modifiedSinceLastSubmit": false,
+                "pristine": false,
+                "submitting": false,
+                "submitFailed": false,
+                "submitSucceeded": false,
+                "touched": {
+                  "assetCollection": false,
+                  "title": false,
+                  "sourceUrl": false
+                },
+                "valid": false,
+                "values": {
+                  "title": "Screen Runner capture"
+                },
+                "visited": {
+                  "assetCollection": false,
+                  "title": true,
+                  "sourceUrl": false
+                }
+              }
+            },
+            "IntakeFormSlot": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "IntakeButtonSlot": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "IntakeActionBar": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "UploaderSlot": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "TicketTable": {
+              "data": [],
+              "initialData": [],
+              "defaultValues": {},
+              "fn": {
+                "getDeleteMutation": "ƒ anon",
+                "getUpdateMutation": "ƒ anon",
+                "loadData": "ƒ anon",
+                "getDeletePayload": "ƒ anon",
+                "getUpdatePayload": "ƒ anon",
+                "getUpdatePayloadCard": "ƒ anon",
+                "getVariables": "ƒ anon",
+                "search": "ƒ anon",
+                "selectRow": "ƒ anon",
+                "deselectRow": "ƒ anon",
+                "toggleRowSelection": "ƒ anon",
+                "selectAllRows": "ƒ anon",
+                "deselectAllRows": "ƒ anon",
+                "selectAllFiltered": "ƒ anon",
+                "deselectAllFiltered": "ƒ anon",
+                "setSelectedRows": "ƒ anon",
+                "setRows": "ƒ anon",
+                "setData": "ƒ anon",
+                "addRows": "ƒ anon",
+                "updateRows": "ƒ anon",
+                "upsertRows": "ƒ anon",
+                "deleteRows": "ƒ anon"
+              },
+              "currentView": {
+                "name": "Default",
+                "rowLimit": 500,
+                "isDefault": true,
+                "columns": [
+                  {
+                    "colId": "TicketColTitle",
+                    "hide": false,
+                    "rowGroup": false
+                  },
+                  {
+                    "colId": "TicketColGuid",
+                    "hide": false,
+                    "rowGroup": false
+                  },
+                  {
+                    "colId": "TicketColState",
+                    "hide": false,
+                    "rowGroup": false
+                  },
+                  {
+                    "colId": "TicketColLib",
+                    "hide": false,
+                    "rowGroup": false
+                  }
+                ],
+                "origin": "system"
+              },
+              "selectedRows": []
+            },
+            "TicketTableSlot": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "IntakePage": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "collapse": "ƒ collapse",
+                "expand": "ƒ expand",
+                "toggleCollapse": "ƒ toggleCollapse",
+                "showLoading": "ƒ showLoading",
+                "hideLoading": "ƒ hideLoading"
+              }
+            },
+            "Screen": {
+              "fn": {
+                "hide": "ƒ hide",
+                "show": "ƒ show",
+                "toggle": "ƒ toggle",
+                "resetHidden": "ƒ resetHidden",
+                "showLoading": "ƒ oe",
+                "hideLoading": "ƒ le",
+                "setContextValue": "ƒ setContextValue",
+                "deleteContextValue": "ƒ deleteContextValue",
+                "setContext": "ƒ setContext",
+                "mergeContext": "ƒ mergeContext",
+                "executePageLoadAction": "ƒ anon",
+                "return": "ƒ t"
+              },
+              "context": {}
+            },
+            "IntakePrepare": {
+              "fn": {
+                "execute": "ƒ bound executeAction"
+              }
+            }
+          },
+          "showScreenDialog": "ƒ bound showCanvasDialog"
+        },
+        "payload": {},
+        "trace": {
+          "runtime": 0,
+          "property": "url",
+          "dynamicPropPathComputeTime": 0,
+          "dynamicPropPaths": [
+            [
+              "url"
+            ]
+          ],
+          "dynamicProps": {
+            "url": {
+              "path": [
+                "url"
+              ],
+              "info": {
+                "__transform": "(\n  $me := $metadata.user.id;\n  $now := $floor($millis() / 1000);\n  $rows := $components.TicketTable.data;\n  $mine := $rows[requestedByUserId = $me and state = \"issued\" and expire > $now];\n  $t := ($m…[truncated]",
+                "__dynamicFields": "[elided]",
+                "__cacheKey": "",
+                "__remote": false
+              }
+            }
+          }
+        },
+        "remote": false,
+        "language": "JSONata",
+        "result": "data:text/html;base64,PCFkb2N0eXBlIGh0bWw+PG1ldGEgY2hhcnNldD0idXRmLTgiPgo8c3R5bGU+Cjpyb290e2NvbG9yLXNjaGVtZTpsaWdodCBkYXJrOy0tZmc6IzFjMjMzMDstLWRpbTojNWI2Njc2fQpAbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOi…[truncated]"
+      }
+    ]
+  }
+]

@@ -1,0 +1,136 @@
+{
+ "screenId": "assetPlayerDialog",
+ "name": "Asset Player Dialog",
+ "isWidget": true,
+ "version": "0.0.2",
+ "deployed": true,
+ "design": {
+  "components": [
+   {
+    "name": "Asset Player",
+    "tabTitle": "Asset Player",
+    "type": "canvas",
+    "props": {
+     "design": {
+      "PlayerFrame0": {
+       "type": {
+        "resolvedName": "EmbeddedWebpage"
+       },
+       "isCanvas": true,
+       "props": {
+        "url": {
+         "__transform": "$exists($metadata.urlParameters.shareUrl) ? $metadata.urlParameters.shareUrl & \"?autoplay=true\" : \"\"",
+         "__dynamicFields": {
+          "payload": [],
+          "context": [
+           "metadata.urlParameters.shareUrl"
+          ]
+         },
+         "__cacheKey": "playerUrl",
+         "__remote": false
+        },
+        "width": "100%",
+        "height": "520px",
+        "allowSameOrigin": true,
+        "allowScripts": true,
+        "allowPopups": true,
+        "allowDownloads": true,
+        "allowForms": true,
+        "windowModals": true,
+        "style": {},
+        "padding": 0,
+        "visible": true,
+        "title": "Asset player",
+        "allow": "accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen",
+        "referrerPolicy": "origin"
+       },
+       "displayName": "Webpage",
+       "custom": {
+        "elementName": "AssetPlayer"
+       },
+       "parent": "PlayerWrap00",
+       "hidden": false,
+       "nodes": [],
+       "linkedNodes": {}
+      },
+      "PlayerWrap00": {
+       "type": {
+        "resolvedName": "Container"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexWrap": false,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "width": "100%",
+        "height": "auto",
+        "hidden": false,
+        "flexGrow": true,
+        "flexShrink": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "collapsible": false,
+        "collapsedFooter": false,
+        "collapsedSize": 0,
+        "collapsedByDefault": false,
+        "onClickTransform": false,
+        "layout": "flex",
+        "bordersInput": {},
+        "justifyItems": "start",
+        "style": {},
+        "gap": "0px"
+       },
+       "displayName": "Container",
+       "custom": {},
+       "parent": "ROOT",
+       "hidden": false,
+       "nodes": [
+        "PlayerFrame0"
+       ],
+       "linkedNodes": {}
+      },
+      "ROOT": {
+       "type": {
+        "resolvedName": "Screen"
+       },
+       "isCanvas": true,
+       "props": {
+        "padding": 0,
+        "margin": 0,
+        "flexDirection": "column",
+        "flexWrap": false,
+        "alignItems": "stretch",
+        "justifyContent": "flex-start",
+        "width": "100%",
+        "height": "100%",
+        "hidden": false,
+        "flexGrow": false,
+        "shadow": false,
+        "borderRadius": 0,
+        "flowsDelay": 0,
+        "removeOuterMargin": true
+       },
+       "displayName": "Screen",
+       "custom": {
+        "elementName": "Screen",
+        "elementCounts": {
+         "Container": 1,
+         "EmbeddedWebpage": 1
+        }
+       },
+       "parent": null,
+       "hidden": false,
+       "nodes": [
+        "PlayerWrap00"
+       ],
+       "linkedNodes": {}
+      }
+     }
+    }
+   }
+  ]
+ }
+}

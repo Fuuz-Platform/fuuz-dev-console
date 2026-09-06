@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "out",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/core", "src/node", "test"],
+  // `domStructure` and `runtimeScrape` read a live DOM, so they need lib.dom and only
+  // ever run in the page. The CLI and MCP server receive its output already parsed, over the
+  // bridge — they never scrape anything themselves.
+  "exclude": ["src/panel", "src/extension", "src/cli", "src/core/domStructure.ts", "src/core/canvasScrape.ts", "src/core/consoleDom.ts", "src/core/runtimeScrape.ts"]
+}

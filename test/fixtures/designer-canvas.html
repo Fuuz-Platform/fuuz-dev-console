@@ -1,0 +1,56 @@
+<!--
+  A Container and its three input children, captured live from the Asset Intake
+  screen designer canvas on admin.fuuz.app (2026-08-17).
+
+  Verbatim apart from the SVG path data and the resize-handle divs, which carry
+  nothing the scraper reads.
+
+  What this pins:
+    · every element wrapper carries BOTH data-screen-element (type) and
+      data-system-name (name)
+    · the inner #<name> div holds the authored layout; the wrapper holds the
+      renderer's positioning, and conflating them reports the wrong CSS
+    · inputs expose data-label + data-data-path, and their field div leaks React
+      props as attributes (formelement, field, description, element)
+    · props React stringified appear as [object Object] — present, unreadable
+-->
+<div class="jss697" data-screen-element="Container" data-system-name="IntakeFieldStack" style="position: relative; user-select: auto; opacity: 1; display: flex; width: 100%; height: auto; box-sizing: border-box; flex-shrink: 0;">
+  <div id="IntakeFieldStack" class="jss701 undefined jss704 jss676" style="box-sizing: border-box; width: 100%; padding: 8px; margin: 0px; align-items: stretch; visibility: visible; border-radius: 0px; display: flex; flex-direction: column; justify-content: flex-start;">
+
+    <div class="jss697" data-screen-element="SelectInput" data-system-name="IntakeTarget" style="position: relative; display: flex; align-items: start; width: 420px; height: auto;">
+      <div class="jss724" data-label="Library / Collection" data-data-path="assetCollection" style="margin: 0px; padding: 8px;">
+        <div class="jss745 jss725 jss726">
+          <div class="select--is-disabled css-14jk2my-container">
+            <div class="MuiFormControl-root MuiTextField-root jss746">
+              <label class="MuiFormLabel-root Mui-disabled" data-shrink="false">Library / Collection</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="jss697" data-screen-element="TextInput" data-system-name="IntakeTitle" style="position: relative; display: flex; align-items: start; width: 420px; height: auto;">
+      <div class="jss724" data-label="Title" data-data-path="title" style="margin: 0px; padding: 8px;">
+        <div class="MuiFormControl-root MuiTextField-root jss725 jss726 jss159" height="100%" help="[object Object]" validation="[object Object]" formelement="AssetIntakeForm" field="title" description="Optional — leave blank and the uploaded file name is used." element="TextInput" form="[object Object]" history="[object Object]" querystring="[object Object]" helpdependency="[object Object]" meta="[object Object]">
+          <label class="MuiFormLabel-root Mui-disabled" data-shrink="false">Title</label>
+          <div class="MuiInputBase-root MuiInput-root">
+            <input aria-invalid="false" autocomplete="off" disabled="" rows="3" type="text" variant="standard" class="MuiInputBase-input jss160" value="">
+          </div>
+        </div>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="jss697" data-screen-element="TextInput" data-system-name="IntakeSource" style="position: relative; display: flex; align-items: start; width: 420px; height: auto;">
+      <div class="jss724" data-label="Source URL" data-data-path="sourceUrl" style="margin: 0px; padding: 8px;">
+        <div class="MuiFormControl-root MuiTextField-root jss725 jss726 jss159" height="100%" help="[object Object]" validation="[object Object]" formelement="AssetIntakeForm" field="sourceUrl" description="Optional. Used only when no file is selected — Bunny fetches from this URL instead." element="TextInput" form="[object Object]" meta="[object Object]">
+          <label class="MuiFormLabel-root Mui-disabled" data-shrink="false">Source URL</label>
+        </div>
+      </div>
+      <div></div>
+    </div>
+
+  </div>
+  <div class="jss699"><span></span><span></span><span></span><span></span></div>
+</div>
