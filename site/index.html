@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fuuz Dev Console &mdash; Fuuz Accelerator</title>
+<meta name="description" content="Fuuz Dev Console — a Chrome DevTools extension that reads a Fuuz screen&#x27;s console as an execution log beside the state it produced, with trace links between the two.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://accelerators.fuuz.com/fuuz-dev-console/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://accelerators.fuuz.com/fuuz-dev-console/">
+<meta property="og:site_name" content="Fuuz Accelerators">
+<meta property="og:title" content="Fuuz Dev Console &mdash; Fuuz Accelerator">
+<meta property="og:description" content="Fuuz Dev Console — a Chrome DevTools extension that reads a Fuuz screen&#x27;s console as an execution log beside the state it produced, with trace links between the two.">
+<link rel="icon" href="assets/appicon-violet.svg">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="prose.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Fuuz Dev Console",
+  "url": "https://accelerators.fuuz.com/fuuz-dev-console/",
+  "description": "Fuuz Dev Console \u2014 a Chrome DevTools extension that reads a Fuuz screen's console as an execution log beside the state it produced, with trace links between the two.",
+  "codeRepository": "https://github.com/Fuuz-Platform/fuuz-dev-console",
+  "applicationCategory": "BusinessApplication",
+  "runtimePlatform": "Fuuz",
+  "author": {
+    "@type": "Organization",
+    "name": "Fuuz",
+    "url": "https://fuuz.com"
+  }
+}
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="../"><img src="assets/logo-horizontal-on-midnight.svg" alt="Fuuz"></a>
+    <span class="section">Accelerators</span>
+    <nav><a href="#why-a-browser-extension">Why a browser extension</a><a href="#install">Install</a><a href="#what-you-see">What you see</a><a href="https://github.com/Fuuz-Platform/fuuz-dev-console">GitHub</a></nav>
+  </div>
+</header>
+<main>
+<div class="wrap hero">
+  <p class="eyebrow">Accelerator &middot; Fuuz package</p>
+  <h1>Fuuz Dev <span class="accent">Console</span></h1>
+  <p class="lede">Fuuz Dev Console — a Chrome DevTools extension that reads a Fuuz screen&#x27;s console as an execution log beside the state it produced, with trace links between the two.</p>
+  <div class="ctas">
+    <a class="cta cta-primary" href="https://github.com/Fuuz-Platform/fuuz-dev-console">Get the package</a>
+    <a class="cta cta-secondary" href="../">All accelerators</a>
+  </div>
+</div>
+<section>
+  <div class="wrap prose">
+<p>Read a Fuuz screen's console as an <strong>execution log</strong> and the <strong>state it
+produced</strong>, with trace links between the two.</p>
+<p>The platform's screen runner already shows a console. What this adds is the
+state beside it, and the ability to ask of any value: <em>which writes produced
+this?</em></p>
+<h2 id="why-a-browser-extension">Why a browser extension</h2>
+<p>The Fuuz screen runtime announces every transform through <code>console.debug</code>, so
+capturing it needs nothing more than wrapping <code>console</code> in the page's own world.
+That means <strong>no debug port, no second browser, no logging in again</strong> — it runs in
+the browser you're already using, already signed in.</p>
+<h2 id="install">Install</h2>
+<pre><code class="language-bash">npm install
+npm run build
+</code></pre>
+<p>Then <code>chrome://extensions</code> → enable <strong>Developer mode</strong> → <strong>Load unpacked</strong> →
+select <code>platform/dev-console/dist</code>.</p>
+<p>Open a Fuuz screen, open DevTools, and pick the <strong>Fuuz Dev Console</strong> tab.
+<strong>Reload the page after installing</strong> — content scripts only inject on load.</p>
+<h2 id="what-you-see">What you see</h2>
+<p><strong>Execution log</strong> — each console call classified into a query, transform, flow
+call or error, with its duration and the state path it wrote. Objects are
+captured whole, so the runtime's <code>expression</code> / <code>result</code> / <code>trace</code> payloads stay
+structured rather than collapsing to <code>{…}</code>.</p>
+<p>Every row carries <code>#seq</code> — capture order, which is the only <em>total</em> order, since
+the runtime flushes its own logs through a debounce — and, where one applies, the
+screen event it belongs to: <code>Save · 3</code> is the third piece of work that click
+produced. Clicking the event chip shows that interaction alone. Roots are drawn
+solid and followers dashed, because the runtime states the interaction but not
+what followed from it: the grouping is capture order plus a quiet gap, and the
+panel says so rather than implying a causal record it doesn't have.</p>
+<p><strong>Keep</strong> in the log footer sets how many entries are retained (up to <em>All</em>), and
+the setting persists. Fuuz's own console keeps 50 — long enough to lose the thing
+you are looking for on a busy screen, which is the reason this one is yours to
+set.</p>
+<p><strong>Current state</strong> — the runtime logs a complete <code>context</code> snapshot
+(<code>{ metadata, components, … }</code>) with every transform, so the tree is the
+platform's own state, not a reconstruction: components no transform touched
+still appear, with their form state, data and current view. Computed props
+(<code>disabled</code>, <code>url</code>) are layered on from the transforms that produced them,
+because the snapshot doesn't carry those.</p>
+<p>The two panes are linked, which is the point:</p>
+<ul>
+<li><code>→ components.Foo.url</code> on a log entry <strong>reveals</strong> that path in the state tree.</li>
+<li><code>⌁ n</code> on a state value <strong>traces</strong> it: the log filters to the <em>n</em> writes behind
+  it, and a numbered timeline shows each step's expression and its
+  <code>before → after</code>.</li>
+</ul>
+<p>The chain is real, not just direct writes. Each entry's expression is parsed for
+the paths it reads and those edges are walked backwards — so a <code>url</code> built from
+a base64 document built from a filtered row set resolves back to the query and
+the signed-in user.</p>
+<h2 id="network-issues-and-the-report">Network, Issues, and the report</h2>
+<p><strong>Network</strong> captures every request the screen makes, and adds the two things the
+browser's own tab won't tell you: the <strong>GraphQL operation name</strong> (so
+<code>/application</code> doesn't appear forty times identically) and a <code>200 ⚠</code> marker on
+responses that carry a GraphQL <code>errors[]</code> — a failed query returns HTTP 200, so
+the browser shows it green.</p>
+<p><strong>Issues</strong> ranks what is probably wrong, each with the trace that proves it:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>rule</th>
+<th>what it catches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>transform-error</code></td>
+<td>a transform threw, with its write chain and expression</td>
+</tr>
+<tr>
+<td><code>transform-loop</code></td>
+<td>one path recomputed ≥5× in 3s — high when the value never changes</td>
+</tr>
+<tr>
+<td><code>slow-transform</code></td>
+<td>transforms run on the UI thread, so these are visible jank</td>
+</tr>
+<tr>
+<td><code>request-failed</code></td>
+<td>4xx/5xx, and transport failures the status column shows as 0</td>
+</tr>
+<tr>
+<td><code>graphql-error</code></td>
+<td>errors returned inside an HTTP 200</td>
+</tr>
+<tr>
+<td><code>duplicate-request</code></td>
+<td>the identical body sent ≥3× in 5s — a query firing per row</td>
+</tr>
+<tr>
+<td><code>slow-request</code> / <code>large-response</code></td>
+<td>the screen waiting, or parsing, too long</td>
+</tr>
+<tr>
+<td><code>unattributed-transform</code></td>
+<td>props the runtime wouldn't tie to an element</td>
+</tr>
+</tbody>
+</table></div>
+<p>Detection is windowed, not cumulative: eight evaluations over eight minutes is a
+person using the screen, and doesn't fire. A rule that cries wolf is worse than
+no rule.</p>
+<p><strong>Copy MD</strong> puts the whole run on the clipboard as markdown for pasting into an
+LLM — issues first with their traces, then the state outline, the log, the
+network table, and the expressions that failed. It's bounded (60 entries, 40
+requests) so it stays pasteable, and session tokens are redacted.</p>
+<h2 id="design-tab-findings-before-anything-runs">Design tab — findings before anything runs</h2>
+<p>The console can only report a defect after it fires. Once the deployed design is
+fetched, these are detectable statically:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>rule</th>
+<th>what it catches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>base64-non-latin1</code></td>
+<td><code>$base64encode</code> over <code>—</code>, <code>•</code>, <code>…</code> — <code>btoa</code> is Latin1-only, so the transform can never succeed</td>
+</tr>
+<tr>
+<td><code>unknown-component-ref</code></td>
+<td><code>$components.X</code> where <code>X</code> isn't on the screen (usually a rename that didn't propagate)</td>
+</tr>
+<tr>
+<td><code>column-width-string</code></td>
+<td><code>width: "110"</code> — AG Grid ignores it and falls back to the default</td>
+</tr>
+<tr>
+<td><code>unknown-column-type</code></td>
+<td>a <code>colDef.type</code> AG Grid doesn't define</td>
+</tr>
+<tr>
+<td><code>duplicate-cache-key</code></td>
+<td>two elements sharing a <code>__cacheKey</code>, which is what defeats attribution</td>
+</tr>
+<tr>
+<td><code>remote-transform</code></td>
+<td>a transform paying a round trip on every re-evaluation</td>
+</tr>
+</tbody>
+</table></div>
+<p>Run against the deployed Asset Intake screen, this finds the <code>btoa</code> bug — and
+two string column widths — without executing anything.</p>
+<h2 id="scratchpad-x-develop-don-t-just-debug">Scratchpad (ƒx) — develop, don't just debug</h2>
+<p>Every entry carries the screen's live <code>context</code>, so the scratchpad evaluates
+<strong>JSONata against the state the screen is actually holding</strong>. Write
+<code>$components.TicketTable.data[state = "issued"]</code>, see the answer immediately,
+then paste the finished expression into the designer once — instead of the
+edit → save → deploy → reload loop.</p>
+<p>The bundled JSONata is <strong>2.1.1</strong>, the same version the platform evaluates with,
+so what works here works there. <code>$metadata</code>, <code>$components</code> and the rest are
+bound exactly as the runtime binds them.</p>
+<h2 id="pick-dom-to-fuuz-element">Pick — DOM to Fuuz element</h2>
+<p>Select an element in <strong>Elements</strong>, then hit <strong>Pick</strong>. The panel walks up from
+<code>$0</code> reading <code>element</code> (the element type), <code>formelement</code> (the owning form) and
+<code>data-data-path</code> (the bound field) to name what you clicked, and seeds the
+scratchpad with it.</p>
+<h2 id="role">Role</h2>
+<p>The status bar shows the <code>roleId</code> and tenant the capture is running as. "Works
+for admin, breaks for operator" is a whole bug family, and nothing else tells
+you which one you're testing.</p>
+<h2 id="how-transform-logging-gets-turned-on">How transform logging gets turned on</h2>
+<p>The runtime gates every <code>Transform Debugging:</code> emission on a session setting:</p>
+<pre><code class="language-js">transformDebuggingEnabled: &quot;true&quot; === sessionStorage.getItem(&quot;transformDebuggingEnabled&quot;)
+</code></pre>
+<p>Normally you'd flip it from the avatar menu, or with <code>?developerMode=true</code>. The
+content script sets it at <code>document_start</code> — before the app bundle evaluates —
+so the runtime comes up with logging already on, <strong>on any route</strong>, with no user
+action.</p>
+<p>Two things still cause silence, and neither is a route:</p>
+<ul>
+<li><strong>The result cache.</strong> <code>executeTransform</code> returns a cached value <em>before</em> the
+  logging line, so an unchanged transform logs nothing. Reload to see a cold
+  evaluation.</li>
+<li><strong>A tab open before install.</strong> Content scripts only inject on page load.</li>
+</ul>
+<h2 id="the-design-join">The design join</h2>
+<p>The runtime names the owning component only for action-driven transforms
+(<code>trace.origin === 'Action'</code> gives <code>trace.actionName</code>); every other transform
+logs a bare <code>trace.property</code>. The screen design knows the rest — and the two join
+<em>exactly</em>, because both carry the same object: the design stores
+<code>props[prop] = { __transform, __cacheKey, __remote }</code> and the runtime echoes it
+at <code>trace.dynamicProps[prop].info</code>.</p>
+<p><strong>The design is fetched live, from the deployed version.</strong> The panel reads the
+running screen's <code>screenVersionId</code> out of the runtime context, reads the page's
+own session token from <code>localStorage</code>, and queries <code>screenVersion { design }</code> —
+so it joins against what is actually deployed. That matters: joining against a
+checked-in design file doesn't merely fail, it can attribute <em>wrongly</em>. The
+Asset Intake seed at v0.0.7 named <code>IntakeSubmit</code>, while the deployed v0.0.15
+computes that property on <code>IntakePrepare</code> and puts <code>url</code> on a <code>TusUploader</code>
+element the seed had never heard of.</p>
+<p>The token is the signed-in user's, so the panel can only ever see what they can
+see, and it is never cached — the JWT rotates roughly every 15 minutes, so it is
+re-read per request. <strong>Dump raw</strong> redacts anything JWT-shaped before writing.</p>
+<p>With a design loaded, the console attributes each transform to its real element,
+labels it with the element type, and reports <strong>coverage</strong> — which declared
+dynamic props never evaluated. A <code>disabled</code> transform that never fired is a
+branch the run never reached.</p>
+<p>Where the design is genuinely ambiguous (two table columns sharing one
+<code>__cacheKey</code> <em>and</em> one transform) it declines to attribute rather than pick one.
+Anything unattributed stays in a <code>(computed)</code> bucket.</p>
+<h2 id="connect-to-claude">Connect to Claude</h2>
+<p>The <strong>Connect to Claude</strong> tab wires this panel to a local MCP server so Claude
+Code can read the diagnostics directly — the issues with their traces, the state
+tree, the provenance behind any value, and a JSONata evaluator bound to the live
+context. Claude gets the <em>analysis</em>, not raw logs it has to re-derive.</p>
+<p>One-time setup, then a button:</p>
+<pre><code class="language-bash">claude mcp add fuuz-ui --scope user -- node &quot;$(pwd)/src/mcp/server.cjs&quot;   # from platform/dev-console
+</code></pre>
+<p>The <strong>Connect to Claude</strong> tab shows this command with the path already filled
+in — the server reports its own location over <code>/health</code>, so there is no
+placeholder to substitute.</p>
+<p>Start a Claude session, press <strong>Connect to Claude</strong> in the panel, and each
+capture is pushed to a loopback bridge on <code>127.0.0.1:8788</code>. Then ask <em>"what's
+wrong with the screen I have open?"</em></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>tool</th>
+<th>what it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fuuz_screen_status</code></td>
+<td>where the data is coming from</td>
+</tr>
+<tr>
+<td><code>fuuz_screen_issues</code></td>
+<td>ranked problems, each with its trace</td>
+</tr>
+<tr>
+<td><code>fuuz_screen_trace</code></td>
+<td>the write chain behind any value</td>
+</tr>
+<tr>
+<td><code>fuuz_screen_state</code></td>
+<td>the state tree, or one subtree</td>
+</tr>
+<tr>
+<td><code>fuuz_screen_log</code></td>
+<td>the classified execution log</td>
+</tr>
+<tr>
+<td><code>fuuz_screen_eval</code></td>
+<td>JSONata against the live context</td>
+</tr>
+<tr>
+<td><code>fuuz_screen_report</code></td>
+<td>the full markdown diagnostic</td>
+</tr>
+<tr>
+<td><code>fuuz_screen_attach</code></td>
+<td>drive a browser from the agent, when no panel is open</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nothing leaves the machine: the bridge binds to loopback only, session tokens are
+redacted before anything is pushed, and disconnecting stops it immediately. No
+Claude Code? <strong>Copy MD</strong> gives the same data for any model.</p>
+<p>Why not <code>chrome-devtools-mcp</code>? It hands an agent raw console lines and requests,
+which is the cheap part — the expensive part is deriving meaning from them.
+They're complementary: Chrome's for generic browser control, this for Fuuz
+semantics.</p>
+<h2 id="cli">CLI</h2>
+<p>The same core runs headless, over the DevTools protocol, for CI or for capturing
+a run without a browser extension installed:</p>
+<pre><code class="language-bash">npm run dev-console -- --open '&lt;screen /run url&gt;' --url admin.fuuz.app
+#   --design &lt;file&gt;  join a screen design      --for &lt;seconds&gt;  capture, report, exit
+#   --dump &lt;file&gt;    write the payload as JSON --serve [port]   live console at localhost
+#   --json           NDJSON per entry          --no-launch      attach to your own browser
+</code></pre>
+<p><code>--serve</code> hosts the same React panel at <code>http://127.0.0.1:8777</code>, streaming over
+SSE — useful when you want the full UI without installing the extension.</p>
+<h2 id="layout">Layout</h2>
+<pre><code>src/core/       pure: classify, provenance, stateTree, designJoin, screenApi,
+                network, diagnose, designLint, stateDiff, report  (no Node deps)
+src/extension/  MV3 — MAIN-world console hook, relay, service worker, devtools page
+src/panel/      the React console + the host abstraction it talks through
+src/node/       DevTools-protocol capture, used only by the CLI
+src/cli/        headless runner and its served preview
+</code></pre>
+<p><code>src/core</code> is deliberately dependency-free: it's what lets the same pipeline run
+in a DevTools panel, in Node, and under jsdom in the tests.</p>
+<h2 id="tests">Tests</h2>
+<pre><code class="language-bash">npm test         # 96 unit tests over the core, against real captured fixtures
+npm run test:panel   # headless render of the built panel in jsdom
+</code></pre>
+<p>Fixtures in <code>test/fixtures/</code> are real captures — the console output of a live
+Asset Intake screen and two pushed screen designs — not hand-written shapes.</p>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="wrap">
+    <p>Fuuz&reg; is an Enterprise Industrial Intelligence Platform.
+      <a href="https://accelerators.fuuz.com/">All accelerators</a> &middot;
+      <a href="https://github.com/Fuuz-Platform/fuuz-dev-console">Source</a> &middot;
+      <a href="https://fuuz.com">fuuz.com</a></p>
+  </div>
+</footer>
+</body>
+</html>
