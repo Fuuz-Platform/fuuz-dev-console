@@ -1,5 +1,9 @@
 # Fuuz Dev Console
 
+> **Beta concept — not an accelerator.** Published as a working concept to read, run
+> and take the pattern from. It is not a supported deliverable, it carries no service
+> level agreement, and it may change or be withdrawn without notice.
+
 Read a Fuuz screen's console as an **execution log** and the **state it
 produced**, with trace links between the two.
 
@@ -269,3 +273,9 @@ npm run test:panel   # headless render of the built panel in jsdom
 
 Fixtures in `test/fixtures/` are real captures — the console output of a live
 Asset Intake screen and two pushed screen designs — not hand-written shapes.
+
+## Service levels
+
+No service level agreement applies to anything published here. It becomes a supported
+deliverable only once it has been implemented by a Fuuz services professional or an
+approved Fuuz partner.
